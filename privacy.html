@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — MEW ON CLAW</title>
+<meta name="description" content="Privacy policy at MEW ON CLAW">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<style>
+* { font-family: 'Inter', sans-serif; }
+.font-pixel { font-family: 'Pixelify Sans', monospace !important; font-weight: 700; letter-spacing: -0.03em; }
+.font-pixel-clear {
+    font-family: 'Silkscreen', 'Pixelify Sans', monospace !important;
+    font-weight: 700;
+    letter-spacing: 0.02em !important;
+}
+body { background: #0A0A0A; color: white; }
+.crab-icon { aspect-ratio: 846 / 716; background-image: url(assets/logo.png); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: transparent !important; }
+/* Animated crab in nav header — color shifts smoothly pink ↔ lime */
+.crab-icon.crab-animated { animation: none; }
+@keyframes crabColorPulse {
+    0%, 100% { background-color: #14F195; }
+    50% { background-color: #14F195; }
+}
+/* Animated crab in nav header — color shifts smoothly pink ↔ lime */
+.scroll-fade { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.scroll-fade.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+    .scroll-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+/* Animated bg dot */
+@keyframes pulse-soft { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+.pulse-dot { animation: pulse-soft 2s ease-in-out infinite; }
+body{ background:#9945FF !important; background:linear-gradient(165deg,#9945FF 0%,#6A45E6 28%,#2FA9C8 60%,#14F195 100%) !important; background-attachment:fixed !important; min-height:100vh; }
+</style>
+    <!-- Favicon (embedded base64 - no separate files needed) -->
+    <meta name="theme-color" content="#9945FF">
+
+
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+<body class="min-h-screen bg-[#0A0A0A]/55 text-white">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl">
+    <div class="flex justify-between items-center px-6 lg:px-8 py-5">
+        <a href="index.html" class="flex items-center gap-3">
+            <div class="w-8 h-8 crab-icon crab-animated"></div>
+            <span class="font-pixel text-lg text-white">MEW ON CLAW</span>
+        </a>
+        <div class="hidden lg:flex gap-7 items-center text-sm">
+            <a href="dashboard.html" class="text-white/70 hover:text-white transition">Build</a>
+            <a href="faq.html" class="text-white/70 hover:text-white transition">FAQ</a>
+            <a href="docs.html" class="text-white/70 hover:text-white transition">Docs</a>
+        </div>
+        <div class="flex gap-4 items-center">
+            <a href="index.html#login" class="text-sm text-white/70 hover:text-white transition hidden sm:inline">Sign in</a>
+            <a href="dashboard.html" class="text-sm font-bold bg-[#14F195] text-black px-5 py-2.5 rounded-sm hover:bg-white transition">Try It Free</a>
+        </div>
+    </div>
+</nav>
+<main class="max-w-3xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
+
+    <div class="mb-12 scroll-fade">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0A0A0A]/10 border border-[#14F195]/30 mb-6">
+            <iconify-icon icon="solar:shield-check-bold" width="14" class="text-[#14F195]"></iconify-icon>
+            <span class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#14F195]">Privacy Policy</span>
+        </div>
+        <h1 class="font-pixel-clear text-5xl lg:text-6xl mb-6 leading-[1]">
+            Your data. <span class="text-[#14F195]">Your rules.</span>
+        </h1>
+        <p class="text-white/50 text-sm font-mono">Last updated: April 28, 2026</p>
+    </div>
+
+    <article class="space-y-10 scroll-fade">
+        
+        <section class="p-6 bg-[#0A0A0A]/5 border border-[#14F195]/20 rounded-sm">
+            <h2 class="font-pixel-clear text-xl mb-3">TL;DR</h2>
+            <ul class="space-y-2 text-sm text-white/80">
+                <li>We collect only what we need to run the service.</li>
+                <li>We never sell your data. Ever.</li>
+                <li>You can export, edit, or delete everything anytime.</li>
+                <li>We use industry-standard encryption.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 class="font-pixel-clear text-2xl mb-3">1. What we collect</h2>
+            <p class="text-white/70 leading-relaxed mb-3"><strong>Account info:</strong> email or wallet address (whichever you used to sign in).</p>
+            <p class="text-white/70 leading-relaxed mb-3"><strong>Your builds:</strong> the AI configs, prompts, and outputs you create.</p>
+            <p class="text-white/70 leading-relaxed mb-3"><strong>Usage data:</strong> anonymous metrics (page views, build counts) to improve the product.</p>
+            <p class="text-white/70 leading-relaxed"><strong>Optional:</strong> profile info you choose to add (handle, bio, avatar).</p>
+        </section>
+
+        <section>
+            <h2 class="font-pixel-clear text-2xl mb-3">2. What we never do</h2>
+            <ul class="space-y-2 text-white/70 list-disc pl-6">
+                <li>Sell or share your data with third parties for advertising</li>
+                <li>Train our models on your private builds without consent</li>
+                <li>Read your conversations</li>
+                <li>Track you across the web</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 class="font-pixel-clear text-2xl mb-3">3. Your rights</h2>
+            <p class="text-white/70 leading-relaxed mb-3">You can at any time:</p>
+            <ul class="space-y-2 text-white/70 list-disc pl-6">
+                <li><strong class="text-white">Export</strong> all your data as JSON</li>
+                <li><strong class="text-white">Edit</strong> or correct any info</li>
+                <li><strong class="text-white">Delete</strong> your account and all data within 30 days</li>
+                <li><strong class="text-white">Object</strong> to specific processing</li>
+            </ul>
+            <p class="text-white/70 leading-relaxed mt-3">Contact us anytime to exercise these rights.</p>
+        </section>
+
+        <section>
+            <h2 class="font-pixel-clear text-2xl mb-3">4. Security</h2>
+            <p class="text-white/70 leading-relaxed">Data is encrypted in transit (TLS) and at rest (AES-256). We do regular security audits. If we ever have a breach, we will notify you within 72 hours.</p>
+        </section>
+
+        <section>
+            <h2 class="font-pixel-clear text-2xl mb-3">5. Cookies</h2>
+            <p class="text-white/70 leading-relaxed">We use essential cookies for login. We do NOT use tracking or advertising cookies.</p>
+        </section>
+
+        <section>
+            <h2 class="font-pixel-clear text-2xl mb-3">6. Changes</h2>
+            <p class="text-white/70 leading-relaxed">If we update this policy, we email everyone with active accounts at least 14 days before changes take effect.</p>
+        </section>
+
+        <section class="bg-white/[0.03] border border-white/10 rounded-sm p-6">
+            <h2 class="font-pixel-clear text-xl mb-3">Questions?</h2>
+            <p class="text-white/60 text-sm">Reach out via Telegram or GitHub. We answer.</p>
+        </section>
+    </article>
+</main>
+<!-- Footer -->
+<footer class="border-t border-white/10 mt-20">
+    <div class="grid grid-cols-1 lg:grid-cols-4">
+        <div class="col-span-1 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-white/10">
+            <div class="w-14 h-14 mb-6 crab-icon" style="background-color: #14F195;"></div>
+            <h3 class="font-pixel text-2xl text-white mb-4">MEW ON CLAW</h3>
+            <p class="text-sm text-white/40 leading-relaxed max-w-xs">A free playground for building your own AI &mdash; assistants, agents, tools, workflows.</p>
+            <div class="flex gap-4 mt-8">
+                <a href="https://x.com/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:x" width="20"></iconify-icon></a>
+                <a href="https://t.me/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:telegram" width="20"></iconify-icon></a>
+                <a href="https://github.com/mewonclaw/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:github" width="20"></iconify-icon></a>
+            </div>
+        </div>
+        <div class="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-3">
+            <div class="p-8 lg:p-12 border-r border-b lg:border-b-0 border-white/10">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Build</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="dashboard.html?type=assistant" class="text-white/70 hover:text-white transition">AI Assistants</a></li>
+                    <li><a href="dashboard.html?type=agent" class="text-white/70 hover:text-white transition">AI Agents</a></li>
+                    <li><a href="dashboard.html?type=tool" class="text-white/70 hover:text-white transition">AI Tools</a></li>
+                    <li><a href="dashboard.html?type=workflow" class="text-white/70 hover:text-white transition">AI Workflows</a></li>
+                </ul>
+            </div>
+            <div class="p-8 lg:p-12 border-r border-b lg:border-b-0 border-white/10">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Help</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="faq.html" class="text-white/70 hover:text-white transition">FAQ</a></li>
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="col-span-2 md:col-span-1 p-8 lg:p-12">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Resources</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">Documentation</a></li>
+                    <li><a href="whitepaper.html" class="text-white/70 hover:text-white transition">Whitepaper</a></li>
+                    <li><a href="governance.html" class="text-white/70 hover:text-white transition">Governance</a></li>
+                    <li><a href="privacy.html" class="text-white/70 hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="terms.html" class="text-white/70 hover:text-white transition">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-white/10 px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-white/30">© 2026 MEW ON CLAW. Free AI for everyone, forever.</div>
+        <a href="index.html" class="text-xs text-white/60 hover:text-white transition flex items-center gap-2">
+            <iconify-icon icon="solar:arrow-left-linear" width="14"></iconify-icon>
+            Back to home
+        </a>
+    </div>
+</footer>
+
+<script>
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.scroll-fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — MEW ON CLAW</title>
+    <meta name="description" content="Ask the MEW ON CLAW bot or browse top FAQs.">
+    <meta name="theme-color" content="#9945FF">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #0A0A0A;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        .font-pixel { font-family: 'Pixelify Sans', monospace; }
+        .font-silk { font-family: 'Silkscreen', monospace; }
+        .font-mono { font-family: 'Geist Mono', monospace; }
+        html { scroll-behavior: smooth; }
+        
+        /* === CHATBOT === */
+        .chatbot-hero {
+            background: linear-gradient(135deg, #161616 0%, #1F1F1F 50%, #161616 100%);
+            border: 1px solid rgba(153, 69, 255, 0.25);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px -20px rgba(153, 69, 255, 0.1);
+        }
+        .chatbot-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            background: rgba(153, 69, 255, 0.03);
+        }
+        .chatbot-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(153, 69, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 1px solid rgba(153, 69, 255, 0.3);
+        }
+        .chatbot-status {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .chat-msg {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            animation: fadeUp 0.3s ease;
+        }
+        .chat-msg.user { flex-direction: row-reverse; }
+        .chat-bubble {
+            max-width: 85%;
+            padding: 0.85rem 1.1rem;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+        .chat-msg.bot .chat-bubble {
+            background: #1A1A1A;
+            color: rgba(255,255,255,0.92);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .chat-msg.user .chat-bubble {
+            background: #0A0A0A;
+            color: black;
+            font-weight: 500;
+        }
+        .chat-bubble strong { color: #14F195; font-weight: 600; }
+        .chat-msg.user .chat-bubble strong { color: black; }
+        .chat-bubble code {
+            background: rgba(153, 69, 255, 0.15);
+            color: #14F195;
+            padding: 0.1em 0.35em;
+            border-radius: 3px;
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.9em;
+        }
+        .chat-bubble a { color: #14F195; text-decoration: underline; }
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .chat-msg.bot .chat-avatar { background: rgba(153, 69, 255, 0.15); }
+        .chat-msg.user .chat-avatar { background: rgba(255, 230, 0, 0.2); color: #14F195; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing-dots span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #0A0A0A;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(-4px); }
+        }
+        .suggestion-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(153, 69, 255, 0.08);
+            border: 1px solid rgba(153, 69, 255, 0.25);
+            border-radius: 999px;
+            font-size: 0.78rem;
+            color: #14F195;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .suggestion-btn:hover {
+            background: #0A0A0A;
+            color: black;
+            transform: translateY(-1px);
+        }
+        
+        /* === FAQ === */
+        .faq-item {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: #111111;
+        }
+        .faq-item:hover { border-color: rgba(153, 69, 255, 0.3); }
+        .faq-item.open {
+            border-color: rgba(153, 69, 255, 0.5);
+            background: #161616;
+        }
+        .faq-question {
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            user-select: none;
+        }
+        .faq-question h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: white;
+            margin: 0;
+            flex: 1;
+        }
+        .faq-icon {
+            color: #14F195;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            margin-top: 2px;
+        }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 1.5rem;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.7;
+            font-size: 0.92rem;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 1000px;
+            padding: 0 1.5rem 1.4rem;
+        }
+        .faq-answer p { margin-bottom: 0.6rem; }
+        .faq-answer p:last-child { margin-bottom: 0; }
+        .faq-answer ul { list-style: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+        .faq-answer li { margin-bottom: 0.3rem; }
+        .faq-answer strong { color: white; font-weight: 600; }
+        .faq-answer code {
+            background: rgba(153, 69, 255, 0.1);
+            color: #14F195;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.9em;
+        }
+        .faq-answer a { color: #14F195; text-decoration: underline; }
+        .faq-answer a:hover { color: #14F195; }
+        
+        .category-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.55);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            white-space: nowrap;
+        }
+        .category-tab:hover {
+            border-color: rgba(153, 69, 255, 0.4);
+            color: white;
+        }
+        .category-tab.active {
+            background: #0A0A0A;
+            border-color: #14F195;
+            color: black;
+            font-weight: 600;
+        }
+    body{ background:#9945FF !important; background:linear-gradient(165deg,#9945FF 0%,#6A45E6 28%,#2FA9C8 60%,#14F195 100%) !important; background-attachment:fixed !important; min-height:100vh; }
+</style>
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+<body>
+
+<!-- ============= NAV ============= -->
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/70 border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2.5 hover:opacity-70 transition">
+            <img src="assets/logo.png" alt="MEW ON CLAW" class="w-8 h-8" style="image-rendering: pixelated;">
+            <span class="font-pixel text-lg font-bold tracking-tight">MEW ON CLAW</span>
+        </a>
+        
+        <div class="hidden md:flex items-center gap-6 text-sm">
+            <a href="dashboard.html" class="text-white/70 hover:text-white transition">Build</a>
+            <a href="faq.html" class="text-white font-medium">FAQ</a>
+            <a href="docs.html" class="text-white/70 hover:text-white transition">Docs</a>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <div class="hidden lg:flex items-center gap-3">
+                <a href="https://x.com/mewonclaw" target="_blank" rel="noopener" class="text-white/50 hover:text-white transition" title="X / Twitter">
+                    <iconify-icon icon="simple-icons:x" width="16"></iconify-icon>
+                </a>
+                <a href="https://t.me/mewonclaw" target="_blank" rel="noopener" class="text-white/50 hover:text-white transition" title="Telegram">
+                    <iconify-icon icon="simple-icons:telegram" width="18"></iconify-icon>
+                </a>
+                <a href="https://github.com/mewonclaw/mewonclaw" target="_blank" rel="noopener" class="text-white/50 hover:text-white transition" title="GitHub">
+                    <iconify-icon icon="simple-icons:github" width="18"></iconify-icon>
+                </a>
+            </div>
+            <a href="index.html" class="text-white/70 hover:text-white text-sm transition">Sign in</a>
+            <a href="dashboard.html" class="px-4 py-2 bg-[#14F195] text-black text-sm font-bold rounded-md hover:opacity-80 transition">Try It Free</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ============= HERO + CHATBOT (TOP PRIORITY) ============= -->
+<section class="pt-28 pb-12 px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+            <div class="inline-block mb-5">
+                <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-[#14F195] px-3 py-1.5 border border-[#14F195]/30 rounded-full">
+                    <iconify-icon icon="solar:chat-round-dots-bold" width="11" class="inline align-text-bottom mr-1"></iconify-icon>
+                    Ask anything
+                </span>
+            </div>
+            <h1 class="font-pixel text-4xl md:text-6xl font-bold mb-3 tracking-tight">
+                Got <span class="text-[#14F195]">questions?</span>
+            </h1>
+            <p class="text-base md:text-lg text-white/60 max-w-2xl mx-auto">
+                Ask our AI assistant directly — it knows everything about MEW ON CLAW, $MOC, and how things work.
+            </p>
+        </div>
+        
+        <div class="chatbot-hero">
+            <div class="chatbot-header">
+                <div class="chatbot-avatar">🦀</div>
+                <div class="flex-1">
+                    <div class="font-semibold text-white">MEW ON CLAW Bot</div>
+                    <div class="chatbot-status">
+                        <span class="status-dot"></span>
+                        Online — usually replies instantly
+                    </div>
+                </div>
+                <span class="hidden sm:inline-block font-mono text-[10px] text-white/40 uppercase tracking-widest">Powered by Claude</span>
+            </div>
+            
+            <div id="chatMessages" class="px-5 py-6 overflow-y-auto" style="height: 360px;">
+                <div class="chat-msg bot">
+                    <div class="chat-avatar">🦀</div>
+                    <div class="chat-bubble">
+                        <p class="mb-2"><strong>Hey there!</strong> I am the MEW ON CLAW assistant.</p>
+                        <p class="mb-3" style="margin-bottom: 0.85rem;">Ask me anything about building AI, $MOC, signing in, privacy, or how things work. I am here 24/7.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="suggestion-btn" onclick="askQuestion('How do I build my first AI?')">🛠️ How to build AI?</button>
+                            <button class="suggestion-btn" onclick="askQuestion('When does $MOC drop?')">🚀 When $MOC drops?</button>
+                            <button class="suggestion-btn" onclick="askQuestion('Is it really free forever?')">💎 Free forever?</button>
+                            <button class="suggestion-btn" onclick="askQuestion('What models power my AI?')">🧠 AI models?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 p-4 bg-black/30">
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" class="flex-1 px-4 py-3 bg-[#0A0A0A]/55 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-[#14F195] transition" placeholder="Ask anything about MEW ON CLAW..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                    <button onclick="sendChatMessage()" class="px-5 py-3 bg-[#14F195] text-black font-semibold rounded-lg hover:opacity-80 transition flex items-center gap-2">
+                        <iconify-icon icon="solar:arrow-up-bold" width="16"></iconify-icon>
+                        <span class="hidden sm:inline">Send</span>
+                    </button>
+                </div>
+                <p class="text-[11px] text-white/30 mt-2 text-center font-mono">Free · No login needed · Powered by Claude</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============= DIVIDER ============= -->
+<section class="px-6 lg:px-8 py-6">
+    <div class="max-w-3xl mx-auto flex items-center gap-4">
+        <div class="flex-1 h-px bg-white/10"></div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">Or browse top questions</span>
+        <div class="flex-1 h-px bg-white/10"></div>
+    </div>
+</section>
+
+<!-- ============= FAQ LIST ============= -->
+<section class="px-6 lg:px-8 pb-12">
+    <div class="max-w-3xl mx-auto">
+        <div class="flex flex-wrap gap-2 justify-center mb-8">
+            <button class="category-tab active" data-cat="all" onclick="filterCategory('all', this)">All</button>
+            <button class="category-tab" data-cat="general" onclick="filterCategory('general', this)">General</button>
+            <button class="category-tab" data-cat="ai" onclick="filterCategory('ai', this)">AI Building</button>
+            <button class="category-tab" data-cat="account" onclick="filterCategory('account', this)">Account</button>
+            <button class="category-tab" data-cat="token" onclick="filterCategory('token', this)">$MOC</button>
+            <button class="category-tab" data-cat="privacy" onclick="filterCategory('privacy', this)">Privacy</button>
+        </div>
+        
+        <div id="faqList" class="space-y-2.5"></div>
+    </div>
+</section>
+
+<!-- ============= CTA ============= -->
+<section class="px-6 lg:px-8 pb-20">
+    <div class="max-w-3xl mx-auto bg-[#14F195] rounded-2xl p-8 md:p-10 text-center">
+        <h3 class="font-pixel text-2xl md:text-3xl font-bold text-black mb-3">Still curious?</h3>
+        <p class="text-black/70 mb-6 max-w-xl mx-auto">Hop into our Telegram, or open an issue on GitHub. The team and other builders are always around.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="https://t.me/mewonclaw" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 bg-black/55 text-white font-medium rounded-lg hover:bg-black/80 transition">
+                <iconify-icon icon="simple-icons:telegram" width="18"></iconify-icon>
+                Join Telegram
+            </a>
+            <a href="https://github.com/mewonclaw/mewonclaw/issues" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-medium rounded-lg hover:bg-white/80 transition">
+                <iconify-icon icon="simple-icons:github" width="18"></iconify-icon>
+                Open issue
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============= FOOTER ============= -->
+<footer class="border-t border-white/5 px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+            <div class="col-span-2">
+                <a href="index.html" class="flex items-center gap-2.5 mb-4">
+                    <img src="assets/logo.png" alt="MEW ON CLAW" class="w-8 h-8" style="image-rendering: pixelated;">
+                    <span class="font-pixel text-lg font-bold">MEW ON CLAW</span>
+                </a>
+                <p class="text-sm text-white/50 max-w-md mb-4">A free playground for building AI tools. No code required, no API keys, no usage caps. Forever.</p>
+                <div class="flex gap-3">
+                    <a href="https://x.com/mewonclaw" target="_blank" rel="noopener" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:x" width="18"></iconify-icon></a>
+                    <a href="https://t.me/mewonclaw" target="_blank" rel="noopener" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:telegram" width="20"></iconify-icon></a>
+                    <a href="https://github.com/mewonclaw/mewonclaw" target="_blank" rel="noopener" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:github" width="20"></iconify-icon></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4">Build</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="dashboard.html" class="text-white/70 hover:text-white transition">Dashboard</a></li>
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">Documentation</a></li>
+                    <li><a href="faq.html" class="text-white/70 hover:text-white transition">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-4">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="whitepaper.html" class="text-white/70 hover:text-white transition">Whitepaper</a></li>
+                    <li><a href="governance.html" class="text-white/70 hover:text-white transition">Governance</a></li>
+                    <li><a href="privacy.html" class="text-white/70 hover:text-white transition">Privacy</a></li>
+                    <li><a href="terms.html" class="text-white/70 hover:text-white transition">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-white/40 font-mono">
+            <span>&copy; 2026 MEW ON CLAW. Free AI for everyone.</span>
+            <span>$MOC drops Jun 8, 2026 · 5PM UTC</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+const faqData = [{"cat": "general", "q": "What is MEW ON CLAW?", "a": "<p>MEW ON CLAW is a <strong>free playground</strong> for building AI tools — no coding required.</p><p>Type what you want in plain English, and we generate a working AI in 60 seconds. Assistants, agents, tools, workflows. All yours.</p>"}, {"cat": "general", "q": "Is it really free forever?", "a": "<p><strong>Yes.</strong> No tiers. No usage caps. No credit card. No 'free trial' trickery.</p><p>The core platform stays free, forever. We sustain through voluntary contributions and optional pro features for power users.</p>"}, {"cat": "general", "q": "How is this funded? Where is the catch?", "a": "<p>No catch. Funded by:</p><ul><li>Voluntary contributions from the community</li><li>Optional pro features (custom models, advanced API)</li><li>Enterprise partnerships</li></ul><p>The team is small and lean. We believe AI tools should not be paywalled.</p>"}, {"cat": "ai", "q": "What types of AI can I build?", "a": "<p>Four main types:</p><ul><li><strong>Assistants</strong> — Conversational AI (chat support, writing help)</li><li><strong>Agents</strong> — Autonomous AIs that take actions</li><li><strong>Tools</strong> — Single-purpose utilities (input → output)</li><li><strong>Workflows</strong> — Multi-step pipelines</li></ul>"}, {"cat": "ai", "q": "How long does it take to build an AI?", "a": "<p><strong>Under 60 seconds</strong> from idea to live AI for most use cases.</p><p>Just describe what you want in plain English, pick a type, and you are done. No coding required.</p>"}, {"cat": "account", "q": "How do I sign in?", "a": "<p>Two ways:</p><ul><li><strong>Email + OTP</strong> — Enter email, get a 6-digit code, paste it. No password.</li><li><strong>Wallet connect</strong> — Phantom, MetaMask, Coinbase, Trust, Rainbow</li></ul><p>OTP not arriving? Check spam folder, then ask via <a href='https://t.me/mewonclaw' class='text-[#14F195] underline'>Telegram</a>.</p>"}, {"cat": "token", "q": "What is $MOC?", "a": "<p>$MOC is the <strong>community token</strong> for MEW ON CLAW.</p><p>It is NOT required to use the platform — building AI stays free forever. $MOC is for community ownership, governance, and supporting development.</p>"}, {"cat": "token", "q": "When does $MOC drop?", "a": "<p><strong>June 8, 2026 at 5 PM UTC</strong> on pump.fun (Solana).</p><p>Contract address (CA) will be announced at drop time on our official X account. <strong>Never trust addresses leaked beforehand</strong> — always verify from <a href='https://x.com/mewonclaw' target='_blank' class='text-[#14F195] underline'>@mewonclaw</a>.</p>"}, {"cat": "token", "q": "Where can I buy $MOC?", "a": "<p>Initial launch: <a href='https://pump.fun' target='_blank' class='text-[#14F195] underline'>pump.fun</a> (Solana).</p><p>After launch, expect listings on Solana DEXes (Jupiter, Raydium).</p><p><strong>Warning:</strong> Beware of fake tokens. Always verify the contract address from official channels.</p>"}, {"cat": "privacy", "q": "Is my data safe? Do you sell it?", "a": "<p><strong>Never.</strong> We do not sell, share, or use your data for ads.</p><p>We do not train models on your private builds without consent. You can <strong>export everything</strong> as JSON anytime, or delete completely.</p><p>Full details: <a href='privacy.html' class='text-[#14F195] underline'>Privacy Policy</a>.</p>"}];
+let activeCategory = 'all';
+
+function renderFAQ() {
+    const list = document.getElementById('faqList');
+    let filtered = faqData;
+    if (activeCategory !== 'all') filtered = filtered.filter(item => item.cat === activeCategory);
+    
+    if (filtered.length === 0) {
+        list.innerHTML = '<div class="text-center py-12 text-white/40"><p>No questions in this category. Ask the bot above!</p></div>';
+        return;
+    }
+    
+    list.innerHTML = filtered.map(item => 
+        '<div class="faq-item" onclick="toggleFAQ(this)">' +
+            '<div class="faq-question">' +
+                '<h3>' + item.q + '</h3>' +
+                '<iconify-icon icon="solar:add-circle-bold" width="22" class="faq-icon"></iconify-icon>' +
+            '</div>' +
+            '<div class="faq-answer">' + item.a + '</div>' +
+        '</div>'
+    ).join('');
+}
+
+function toggleFAQ(el) {
+    const wasOpen = el.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) el.classList.add('open');
+}
+
+function filterCategory(cat, btn) {
+    activeCategory = cat;
+    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderFAQ();
+}
+
+const chatHistory = [];
+
+function appendChatMessage(role, content) {
+    const messages = document.getElementById('chatMessages');
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg ' + role;
+    const avatar = role === 'bot' ? '🦀' : '👤';
+    msg.innerHTML = '<div class="chat-avatar">' + avatar + '</div><div class="chat-bubble">' + content + '</div>';
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+    return msg;
+}
+
+function appendTypingIndicator() {
+    const messages = document.getElementById('chatMessages');
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg bot';
+    msg.id = 'typingMsg';
+    msg.innerHTML = '<div class="chat-avatar">🦀</div><div class="chat-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const t = document.getElementById('typingMsg');
+    if (t) t.remove();
+}
+
+function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
+function formatBotMessage(text) {
+    let html = escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    html = html.replace(/\n/g, '<br>');
+    return html;
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    
+    input.value = '';
+    appendChatMessage('user', escapeHtml(text));
+    chatHistory.push({ role: 'user', content: text });
+    appendTypingIndicator();
+    
+    try {
+        const res = await fetch('api/chat-public.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: chatHistory })
+        });
+        const data = await res.json();
+        removeTypingIndicator();
+        
+        if (data.error) {
+            appendChatMessage('bot', '<span style="color:#14F195">⚠️ ' + escapeHtml(data.error) + '</span>');
+        } else {
+            const reply = data.message || 'Sorry, I could not generate a response.';
+            appendChatMessage('bot', formatBotMessage(reply));
+            chatHistory.push({ role: 'assistant', content: reply });
+        }
+    } catch (err) {
+        removeTypingIndicator();
+        appendChatMessage('bot', '<span style="color:#14F195">⚠️ Network error. Please try again.</span>');
+    }
+}
+
+function askQuestion(q) {
+    document.getElementById('chatInput').value = q;
+    sendChatMessage();
+}
+
+renderFAQ();
+</script>
+</body>
+</html>

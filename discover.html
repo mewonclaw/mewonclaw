@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover — MEW ON CLAW</title>
+<meta name="description" content="Browse AIs built by the community at MEW ON CLAW.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<style>
+* { font-family: 'Inter', sans-serif; }
+.font-pixel { font-family: 'Pixelify Sans', monospace !important; font-weight: 700; letter-spacing: -0.03em; }
+.font-pixel-clear {
+    font-family: 'Silkscreen', 'Pixelify Sans', monospace !important;
+    font-weight: 700;
+    letter-spacing: 0.02em !important;
+}
+body { background: #0A0A0A; color: white; }
+.crab-icon { aspect-ratio: 846 / 716; background-image: url(assets/logo.png); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: transparent !important; }
+/* Animated crab in nav header — color shifts smoothly pink ↔ lime */
+.crab-icon.crab-animated { animation: none; }
+@keyframes crabColorPulse {
+    0%, 100% { background-color: #14F195; }
+    50% { background-color: #14F195; }
+}
+/* Animated crab in nav header — color shifts smoothly pink ↔ lime */
+.scroll-fade { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.scroll-fade.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+    .scroll-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+/* Animated bg dot */
+@keyframes pulse-soft { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+.pulse-dot { animation: pulse-soft 2s ease-in-out infinite; }
+body{ background:#9945FF !important; background:linear-gradient(165deg,#9945FF 0%,#6A45E6 28%,#2FA9C8 60%,#14F195 100%) !important; background-attachment:fixed !important; min-height:100vh; }
+</style>
+    <!-- Favicon (embedded base64 - no separate files needed) -->
+    <meta name="theme-color" content="#9945FF">
+
+
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+<body class="min-h-screen bg-[#0A0A0A]/55 text-white">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl">
+    <div class="flex justify-between items-center px-6 lg:px-8 py-5">
+        <a href="index.html" class="flex items-center gap-3">
+            <div class="w-8 h-8 crab-icon crab-animated"></div>
+            <span class="font-pixel text-lg text-white">MEW ON CLAW</span>
+        </a>
+        <div class="hidden lg:flex gap-7 items-center text-sm">
+            <a href="dashboard.html" class="text-white/70 hover:text-white transition">Build</a>
+            <a href="discover.html" class="text-white/70 hover:text-white transition">Discover</a>
+            <a href="docs.html" class="text-white/70 hover:text-white transition">Docs</a>
+        </div>
+        <div class="flex gap-4 items-center">
+            <a href="index.html#login" class="text-sm text-white/70 hover:text-white transition hidden sm:inline">Sign in</a>
+            <a href="dashboard.html" class="text-sm font-bold bg-[#14F195] text-black px-5 py-2.5 rounded-sm hover:bg-white transition">Try It Free</a>
+        </div>
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
+
+    <!-- Hero -->
+    <div class="mb-16 scroll-fade">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#14F195]/10 border border-[#14F195]/30 mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#14F195] pulse-dot"></span>
+            <span class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#14F195]">Live Library</span>
+        </div>
+        <h1 class="font-pixel-clear text-5xl lg:text-7xl mb-6 leading-[1]">
+            Discover what others<br><span class="text-[#14F195]">have built.</span>
+        </h1>
+        <p class="text-lg text-white/60 max-w-2xl leading-relaxed">
+            Browse, fork, or get inspired by AIs from the community. Every build is open — no paywalls.
+        </p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex flex-wrap gap-2 mb-12 border-b border-white/10 pb-4 scroll-fade">
+        <button class="px-4 py-2 bg-[#14F195] text-black text-sm font-bold rounded-sm">All <span class="opacity-60 ml-1">435</span></button>
+        <button class="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-sm transition">Assistants <span class="opacity-50 ml-1">180</span></button>
+        <button class="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-sm transition">Agents <span class="opacity-50 ml-1">95</span></button>
+        <button class="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-sm transition">Tools <span class="opacity-50 ml-1">120</span></button>
+        <button class="px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-sm transition">Workflows <span class="opacity-50 ml-1">40</span></button>
+    </div>
+
+    <!-- Featured Section -->
+    <section id="showcase" class="mb-20">
+        <div class="flex items-baseline justify-between mb-8 scroll-fade">
+            <h2 class="font-pixel-clear text-2xl lg:text-4xl">Featured this week</h2>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-white/40">Updated daily</span>
+        </div>
+
+        <!-- Featured Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#9945FF]/10 to-[#14F195]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Tool</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">MoodboardGPT</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Brand brief in, full moodboard out — palettes, fonts, references.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@maya</span>
+                    <span class="text-white/40">89 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#14F195]/10 to-[#9945FF]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Assistant</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">ScriptGPT</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Writing assistant trained on your channel voice. Drafts video scripts.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@reza</span>
+                    <span class="text-white/40">42 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#9945FF]/10 to-[#9945FF]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Agent</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">TrendScout</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Scans Twitter for trending design topics every morning. Auto-summarizes.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@sasha</span>
+                    <span class="text-white/40">67 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#14F195]/10 to-[#14F195]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Workflow</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">FlowKit</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Multi-step pipeline: scrape, summarize, categorize, email digest.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@kai</span>
+                    <span class="text-white/40">23 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#9945FF]/10 to-[#9945FF]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Tool</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">ColorMatch</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Upload an image, get the perfect Tailwind palette. Export ready.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@dev_jess</span>
+                    <span class="text-white/40">156 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#14F195]/10 to-[#9945FF]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Assistant</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">CRMHelper</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Pulls customer history from Gmail and drafts personalized follow-ups.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@anna_b</span>
+                    <span class="text-white/40">94 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#9945FF]/10 to-[#14F195]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Agent</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">NewsBot</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Daily AI/tech news digest delivered to Slack at 9am sharp.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@brandon</span>
+                    <span class="text-white/40">201 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#9945FF]/10 to-[#9945FF]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Tool</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">DocSummarizer</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Drop a 50-page PDF, get key insights in 3 paragraphs. No fluff.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@minh</span>
+                    <span class="text-white/40">78 runs</span>
+                </div>
+            </div>
+            <div class="group p-6 bg-white/[0.03] border border-white/10 rounded-sm hover:border-[#14F195]/40 hover:bg-white/[0.06] transition-all cursor-pointer scroll-fade">
+                <div class="aspect-[4/3] rounded-sm mb-4 overflow-hidden relative bg-gradient-to-br from-[#14F195]/10 to-[#9945FF]/10 border border-white/5">
+                    <div class="absolute top-2 left-2 text-[8px] font-mono uppercase tracking-widest text-white/50">Workflow</div>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>LIVE
+                    </div>
+                </div>
+                <h3 class="font-bold text-white group-hover:text-[#14F195] transition-colors mb-2">SEOWriter</h3>
+                <p class="text-xs text-white/50 leading-relaxed mb-4">Keyword research, outline, article draft, SEO audit. End-to-end.</p>
+                <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider">
+                    <span class="text-white/40">@sam_writes</span>
+                    <span class="text-white/40">31 runs</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-gradient-to-br from-[#9945FF]/5 to-[#14F195]/5 border border-white/10 rounded-sm p-12 text-center scroll-fade">
+        <div class="inline-block w-20 h-20 mb-6 crab-icon" style="background-color: #14F195;"></div>
+        <h2 class="font-pixel-clear text-3xl lg:text-5xl mb-4">Got an idea? <span class="text-[#14F195]">Build it.</span></h2>
+        <p class="text-white/60 max-w-md mx-auto mb-8">Every AI you see started as someone "what if". What is yours?</p>
+        <a href="dashboard.html" class="inline-flex items-center gap-2 px-8 py-4 bg-[#14F195] text-black font-bold rounded-sm hover:bg-white transition">
+            Try It Free
+            <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+        </a>
+    </section>
+
+</main>
+<!-- Footer -->
+<footer class="border-t border-white/10 mt-20">
+    <div class="grid grid-cols-1 lg:grid-cols-4">
+        <div class="col-span-1 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-white/10">
+            <div class="w-14 h-14 mb-6 crab-icon" style="background-color: #14F195;"></div>
+            <h3 class="font-pixel text-2xl text-white mb-4">MEW ON CLAW</h3>
+            <p class="text-sm text-white/40 leading-relaxed max-w-xs">A free playground for building your own AI &mdash; assistants, agents, tools, workflows.</p>
+            <div class="flex gap-4 mt-8">
+                <a href="https://x.com/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:x" width="20"></iconify-icon></a>
+                <a href="https://t.me/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:telegram" width="20"></iconify-icon></a>
+                <a href="https://github.com/mewonclaw/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:github" width="20"></iconify-icon></a>
+            </div>
+        </div>
+        <div class="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-3">
+            <div class="p-8 lg:p-12 border-r border-b lg:border-b-0 border-white/10">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Build</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="dashboard.html?type=assistant" class="text-white/70 hover:text-white transition">AI Assistants</a></li>
+                    <li><a href="dashboard.html?type=agent" class="text-white/70 hover:text-white transition">AI Agents</a></li>
+                    <li><a href="dashboard.html?type=tool" class="text-white/70 hover:text-white transition">AI Tools</a></li>
+                    <li><a href="dashboard.html?type=workflow" class="text-white/70 hover:text-white transition">AI Workflows</a></li>
+                </ul>
+            </div>
+            <div class="p-8 lg:p-12 border-r border-b lg:border-b-0 border-white/10">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Discover</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="discover.html" class="text-white/70 hover:text-white transition">Browse AIs</a></li>
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">How it Works</a></li>
+                    <li><a href="discover.html#showcase" class="text-white/70 hover:text-white transition">Showcase</a></li>
+                </ul>
+            </div>
+            <div class="col-span-2 md:col-span-1 p-8 lg:p-12">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Resources</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">Documentation</a></li>
+                    <li><a href="whitepaper.html" class="text-white/70 hover:text-white transition">Whitepaper</a></li>
+                    <li><a href="governance.html" class="text-white/70 hover:text-white transition">Governance</a></li>
+                    <li><a href="privacy.html" class="text-white/70 hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="terms.html" class="text-white/70 hover:text-white transition">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-white/10 px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-white/30">© 2026 MEW ON CLAW. Free AI for everyone, forever.</div>
+        <a href="index.html" class="text-xs text-white/60 hover:text-white transition flex items-center gap-2">
+            <iconify-icon icon="solar:arrow-left-linear" width="14"></iconify-icon>
+            Back to home
+        </a>
+    </div>
+</footer>
+
+<script>
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.scroll-fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

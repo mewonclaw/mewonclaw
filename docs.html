@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — MEW ON CLAW</title>
+<meta name="description" content="How to build your first AI on MEW ON CLAW">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<style>
+* { font-family: 'Inter', sans-serif; }
+.font-pixel { font-family: 'Pixelify Sans', monospace !important; font-weight: 700; letter-spacing: -0.03em; }
+.font-pixel-clear {
+    font-family: 'Silkscreen', 'Pixelify Sans', monospace !important;
+    font-weight: 700;
+    letter-spacing: 0.02em !important;
+}
+body { background: #0A0A0A; color: white; }
+.crab-icon { aspect-ratio: 846 / 716; background-image: url(assets/logo.png); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: transparent !important; }
+/* Animated crab in nav header — color shifts smoothly pink ↔ lime */
+.crab-icon.crab-animated { animation: none; }
+@keyframes crabColorPulse {
+    0%, 100% { background-color: #14F195; }
+    50% { background-color: #14F195; }
+}
+/* Animated crab in nav header — color shifts smoothly pink ↔ lime */
+.scroll-fade { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.scroll-fade.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+    .scroll-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+/* Animated bg dot */
+@keyframes pulse-soft { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+.pulse-dot { animation: pulse-soft 2s ease-in-out infinite; }
+body{ background:#9945FF !important; background:linear-gradient(165deg,#9945FF 0%,#6A45E6 28%,#2FA9C8 60%,#14F195 100%) !important; background-attachment:fixed !important; min-height:100vh; }
+</style>
+    <!-- Favicon (embedded base64 - no separate files needed) -->
+    <meta name="theme-color" content="#9945FF">
+
+
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+<body class="min-h-screen bg-[#0A0A0A]/55 text-white">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl">
+    <div class="flex justify-between items-center px-6 lg:px-8 py-5">
+        <a href="index.html" class="flex items-center gap-3">
+            <div class="w-8 h-8 crab-icon crab-animated"></div>
+            <span class="font-pixel text-lg text-white">MEW ON CLAW</span>
+        </a>
+        <div class="hidden lg:flex gap-7 items-center text-sm">
+            <a href="dashboard.html" class="text-white/70 hover:text-white transition">Build</a>
+            <a href="faq.html" class="text-white/70 hover:text-white transition">FAQ</a>
+            <a href="docs.html" class="text-white/70 hover:text-white transition">Docs</a>
+        </div>
+        <div class="flex gap-4 items-center">
+            <a href="index.html#login" class="text-sm text-white/70 hover:text-white transition hidden sm:inline">Sign in</a>
+            <a href="dashboard.html" class="text-sm font-bold bg-[#14F195] text-black px-5 py-2.5 rounded-sm hover:bg-white transition">Try It Free</a>
+        </div>
+    </div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
+
+    <!-- Hero -->
+    <div class="mb-16 scroll-fade">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0A0A0A]/10 border border-[#14F195]/30 mb-6">
+            <iconify-icon icon="solar:book-bookmark-bold" width="14" class="text-[#14F195]"></iconify-icon>
+            <span class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#14F195]">Docs v1.0</span>
+        </div>
+        <h1 class="font-pixel-clear text-5xl lg:text-7xl mb-6 leading-[1]">
+            How to build<br>your <span class="text-[#14F195]">first AI.</span>
+        </h1>
+        <p class="text-lg text-white/60 max-w-2xl">
+            Everything you need to know. No code background required.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1 scroll-fade">
+            <div class="sticky top-24 space-y-6">
+                <div>
+                    <h3 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-3">Getting Started</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#what-is" class="text-white/70 hover:text-[#14F195] transition">What is MEW ON CLAW?</a></li>
+                        <li><a href="#quickstart" class="text-white/70 hover:text-[#14F195] transition">Quickstart</a></li>
+                        <li><a href="#first-ai" class="text-white/70 hover:text-[#14F195] transition">Your first AI</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-3">Build Types</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#assistants" class="text-white/70 hover:text-[#14F195] transition">Assistants</a></li>
+                        <li><a href="#agents" class="text-white/70 hover:text-[#14F195] transition">Agents</a></li>
+                        <li><a href="#tools" class="text-white/70 hover:text-[#14F195] transition">Tools</a></li>
+                        <li><a href="#workflows" class="text-white/70 hover:text-[#14F195] transition">Workflows</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-3">Advanced</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#sharing" class="text-white/70 hover:text-[#14F195] transition">Sharing &amp; Embed</a></li>
+                        <li><a href="#api" class="text-white/70 hover:text-[#14F195] transition">API Access</a></li>
+                        <li><a href="#faq" class="text-white/70 hover:text-[#14F195] transition">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <div class="lg:col-span-3 space-y-16">
+            
+            <section id="what-is" class="scroll-fade">
+                <h2 class="font-pixel-clear text-3xl mb-4">What is MEW ON CLAW?</h2>
+                <p class="text-white/70 leading-relaxed mb-4">
+                    MEW ON CLAW is a free no-code playground for building your own AI. Whether you want a chat assistant, an autonomous agent, a single-purpose tool, or a multi-step workflow, you describe what you want in plain English and we generate it for you.
+                </p>
+                <p class="text-white/70 leading-relaxed">
+                    No API keys to wrangle, no infra to maintain. Just type, test, and share.
+                </p>
+            </section>
+
+            <section id="quickstart" class="scroll-fade">
+                <h2 class="font-pixel-clear text-3xl mb-6">Quickstart</h2>
+                <div class="space-y-4">
+                    <div class="flex gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="font-pixel-clear text-3xl text-[#14F195] flex-shrink-0">01</div>
+                        <div>
+                            <div class="font-semibold mb-1">Sign in</div>
+                            <p class="text-sm text-white/60">Email or wallet, your choice. No password.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="font-pixel-clear text-3xl text-[#14F195] flex-shrink-0">02</div>
+                        <div>
+                            <div class="font-semibold mb-1">Pick a build type</div>
+                            <p class="text-sm text-white/60">Assistant, Agent, Tool, or Workflow.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="font-pixel-clear text-3xl text-[#14F195] flex-shrink-0">03</div>
+                        <div>
+                            <div class="font-semibold mb-1">Describe it</div>
+                            <p class="text-sm text-white/60">Plain English. Be specific about behavior, tone, knowledge.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="font-pixel-clear text-3xl text-[#14F195] flex-shrink-0">04</div>
+                        <div>
+                            <div class="font-semibold mb-1">Test &amp; share</div>
+                            <p class="text-sm text-white/60">Live preview, then a unique link to send anywhere.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="first-ai" class="scroll-fade">
+                <h2 class="font-pixel-clear text-3xl mb-4">Your first AI</h2>
+                <p class="text-white/70 leading-relaxed mb-6">Try this prompt to start:</p>
+                <div class="bg-black/55 border border-[#14F195]/30 rounded-sm p-6 font-mono text-sm">
+                    <div class="text-white/40 mb-2">// Example prompt</div>
+                    <div class="text-[#14F195]">Build me an AI that takes a 5-line<br>recipe and turns it into a friendly<br>cooking assistant for my mom.</div>
+                </div>
+                <p class="text-white/50 text-sm mt-4">That is it. Hit generate, and you have an Assistant in under 60 seconds.</p>
+            </section>
+
+            <section id="assistants" class="scroll-fade">
+                <h2 class="font-pixel-clear text-3xl mb-4">Build types</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="p-6 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="text-[#14F195] mb-3"><iconify-icon icon="solar:chat-line-bold" width="24"></iconify-icon></div>
+                        <h3 class="font-bold mb-2">Assistants</h3>
+                        <p class="text-sm text-white/60">Conversational AI for chat, support, writing help. Persistent memory.</p>
+                    </div>
+                    <div class="p-6 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="text-[#14F195] mb-3"><iconify-icon icon="solar:cpu-bolt-bold" width="24"></iconify-icon></div>
+                        <h3 class="font-bold mb-2">Agents</h3>
+                        <p class="text-sm text-white/60">Autonomous AIs that scrape, search, and act on a schedule.</p>
+                    </div>
+                    <div class="p-6 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="text-[#14F195] mb-3"><iconify-icon icon="solar:settings-minimalistic-bold" width="24"></iconify-icon></div>
+                        <h3 class="font-bold mb-2">Tools</h3>
+                        <p class="text-sm text-white/60">Single-purpose utilities. Input goes in, output comes out.</p>
+                    </div>
+                    <div class="p-6 bg-white/[0.03] border border-white/10 rounded-sm">
+                        <div class="text-[#14F195] mb-3"><iconify-icon icon="solar:diagram-down-bold" width="24"></iconify-icon></div>
+                        <h3 class="font-bold mb-2">Workflows</h3>
+                        <p class="text-sm text-white/60">Multi-step pipelines. Chain together steps, conditions, branches.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="faq" class="scroll-fade">
+                <h2 class="font-pixel-clear text-3xl mb-6">FAQ</h2>
+                <div class="space-y-3">
+                    <details class="p-5 bg-white/[0.03] border border-white/10 rounded-sm cursor-pointer">
+                        <summary class="font-semibold cursor-pointer">Is it really free forever?</summary>
+                        <p class="text-sm text-white/60 mt-3">Yes. No tier upgrade. No hidden costs. Funded by a small team that thinks AI tools should not be paywalled.</p>
+                    </details>
+                    <details class="p-5 bg-white/[0.03] border border-white/10 rounded-sm cursor-pointer">
+                        <summary class="font-semibold cursor-pointer">Do I own my AI?</summary>
+                        <p class="text-sm text-white/60 mt-3">Yes. Your prompts, configs, and outputs are yours. You can export, delete, or migrate anytime.</p>
+                    </details>
+                    <details class="p-5 bg-white/[0.03] border border-white/10 rounded-sm cursor-pointer">
+                        <summary class="font-semibold cursor-pointer">Can I host it on my own domain?</summary>
+                        <p class="text-sm text-white/60 mt-3">Yes via embed code. Or use the API to integrate into your own product.</p>
+                    </details>
+                    <details class="p-5 bg-white/[0.03] border border-white/10 rounded-sm cursor-pointer">
+                        <summary class="font-semibold cursor-pointer">What models power my AI?</summary>
+                        <p class="text-sm text-white/60 mt-3">Top-tier models — GPT-4, Claude, etc. We pick the best fit for your use case automatically.</p>
+                    </details>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</main>
+<!-- Footer -->
+<footer class="border-t border-white/10 mt-20">
+    <div class="grid grid-cols-1 lg:grid-cols-4">
+        <div class="col-span-1 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-white/10">
+            <div class="w-14 h-14 mb-6 crab-icon" style="background-color: #14F195;"></div>
+            <h3 class="font-pixel text-2xl text-white mb-4">MEW ON CLAW</h3>
+            <p class="text-sm text-white/40 leading-relaxed max-w-xs">A free playground for building your own AI &mdash; assistants, agents, tools, workflows.</p>
+            <div class="flex gap-4 mt-8">
+                <a href="https://x.com/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:x" width="20"></iconify-icon></a>
+                <a href="https://t.me/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:telegram" width="20"></iconify-icon></a>
+                <a href="https://github.com/mewonclaw/mewonclaw" target="_blank" class="text-white/40 hover:text-[#14F195] transition"><iconify-icon icon="simple-icons:github" width="20"></iconify-icon></a>
+            </div>
+        </div>
+        <div class="col-span-1 lg:col-span-3 grid grid-cols-2 md:grid-cols-3">
+            <div class="p-8 lg:p-12 border-r border-b lg:border-b-0 border-white/10">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Build</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="dashboard.html?type=assistant" class="text-white/70 hover:text-white transition">AI Assistants</a></li>
+                    <li><a href="dashboard.html?type=agent" class="text-white/70 hover:text-white transition">AI Agents</a></li>
+                    <li><a href="dashboard.html?type=tool" class="text-white/70 hover:text-white transition">AI Tools</a></li>
+                    <li><a href="dashboard.html?type=workflow" class="text-white/70 hover:text-white transition">AI Workflows</a></li>
+                </ul>
+            </div>
+            <div class="p-8 lg:p-12 border-r border-b lg:border-b-0 border-white/10">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Help</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="faq.html" class="text-white/70 hover:text-white transition">FAQ</a></li>
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="col-span-2 md:col-span-1 p-8 lg:p-12">
+                <h4 class="text-xs font-mono uppercase tracking-widest text-white/40 mb-6">Resources</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="docs.html" class="text-white/70 hover:text-white transition">Documentation</a></li>
+                    <li><a href="whitepaper.html" class="text-white/70 hover:text-white transition">Whitepaper</a></li>
+                    <li><a href="governance.html" class="text-white/70 hover:text-white transition">Governance</a></li>
+                    <li><a href="privacy.html" class="text-white/70 hover:text-white transition">Privacy Policy</a></li>
+                    <li><a href="terms.html" class="text-white/70 hover:text-white transition">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-white/10 px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-white/30">© 2026 MEW ON CLAW. Free AI for everyone, forever.</div>
+        <a href="index.html" class="text-xs text-white/60 hover:text-white transition flex items-center gap-2">
+            <iconify-icon icon="solar:arrow-left-linear" width="14"></iconify-icon>
+            Back to home
+        </a>
+    </div>
+</footer>
+
+<script>
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+    });
+}, { threshold: 0.1 });
+document.querySelectorAll('.scroll-fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

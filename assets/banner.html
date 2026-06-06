@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- Source template for banner.png. Re-render with:
+     chrome --headless=new --screenshot=banner.png --window-size=1280,640 banner.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{ --purple:#9945FF; --green:#14F195; --bg:#0A0A0A; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1280px;height:640px;overflow:hidden}
+  body{
+    background:
+      radial-gradient(circle at 12% 18%, rgba(153,69,255,.40), transparent 42%),
+      radial-gradient(circle at 88% 84%, rgba(20,241,149,.34), transparent 44%),
+      var(--bg);
+    font-family:'Space Grotesk',sans-serif;color:#fff;
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  /* scattered pixel squares */
+  .px{position:absolute;border-radius:3px;opacity:.85}
+  .wrap{display:flex;align-items:center;gap:54px;z-index:2;padding:0 70px}
+  .logo{width:230px;height:230px;image-rendering:pixelated;
+    filter:drop-shadow(0 0 34px rgba(20,241,149,.55))}
+  .text{display:flex;flex-direction:column;gap:22px}
+  .kicker{font-size:15px;letter-spacing:7px;font-weight:700;color:var(--green);text-transform:uppercase}
+  .word{font-family:'Press Start 2P',monospace;font-size:50px;line-height:1.28;
+    background:linear-gradient(120deg,var(--purple),var(--green));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 18px rgba(153,69,255,.45))}
+  .tag{font-size:22px;font-weight:500;color:#E8E8F0;max-width:560px;line-height:1.5}
+  .tag b{color:var(--green)}
+  .badges{display:flex;gap:14px;margin-top:6px}
+  .badge{font-size:13px;font-weight:700;letter-spacing:1px;padding:9px 16px;border-radius:999px;text-transform:uppercase}
+  .b1{background:var(--purple);color:#fff}
+  .b2{background:var(--green);color:#06231a}
+  .b3{border:1.5px solid rgba(255,255,255,.25);color:#cfcfe0}
+</style>
+</head>
+<body>
+  <!-- decorative pixels -->
+  <div class="px" style="left:60px;top:90px;width:26px;height:26px;background:var(--purple)"></div>
+  <div class="px" style="left:140px;top:520px;width:34px;height:34px;background:var(--green)"></div>
+  <div class="px" style="left:1180px;top:120px;width:30px;height:30px;background:var(--green)"></div>
+  <div class="px" style="left:1100px;top:520px;width:22px;height:22px;background:var(--purple)"></div>
+  <div class="px" style="left:1210px;top:330px;width:18px;height:18px;background:#fff;opacity:.5"></div>
+  <div class="px" style="left:40px;top:300px;width:18px;height:18px;background:#fff;opacity:.5"></div>
+
+  <div class="wrap">
+    <img class="logo" src="logo.png" alt="" />
+    <div class="text">
+      <div class="kicker">🐾 Digital Studio · $MOC</div>
+      <div class="word">MEW ON<br/>CLAW</div>
+      <div class="tag">Build any AI you can imagine — assistants, agents, tools &amp; workflows.<br/><b>Free. No code. Forever.</b></div>
+      <div class="badges">
+        <span class="badge b1">No-Code</span>
+        <span class="badge b2">Free Forever</span>
+        <span class="badge b3">Solana · $MOC</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

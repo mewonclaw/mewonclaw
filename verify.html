@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — MEW ON CLAW</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Inter:wght@400;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<!-- Favicon (embedded base64 - no separate files needed) -->
+    <meta name="theme-color" content="#9945FF">
+<style>
+* { font-family: 'Inter', sans-serif; }
+.font-pixel { font-family: 'Pixelify Sans', monospace !important; font-weight: 700; }
+.font-pixel-clear { font-family: 'Silkscreen', 'Pixelify Sans', monospace !important; font-weight: 700; }
+body { background: #0A0A0A; color: white; }
+.crab-icon { aspect-ratio: 846 / 716; background-image: url(assets/logo.png); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: transparent !important; }
+@keyframes crabPulse {
+    0%, 100% { background-color: #14F195; }
+    50% { background-color: #14F195; }
+}
+.spinner { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+body{ background:#9945FF !important; background:linear-gradient(165deg,#9945FF 0%,#6A45E6 28%,#2FA9C8 60%,#14F195 100%) !important; background-attachment:fixed !important; min-height:100vh; }
+</style>
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="text-center max-w-md w-full">
+        <div class="w-24 h-24 mx-auto crab-icon mb-8"></div>
+        
+        <div id="state-loading">
+            <div class="w-12 h-12 border-4 border-[#14F195] border-t-transparent rounded-full mx-auto mb-6 spinner"></div>
+            <h1 class="font-pixel-clear text-3xl mb-3">Signing you in...</h1>
+            <p class="text-white/60">Verifying your magic link</p>
+        </div>
+        
+        <div id="state-success" class="hidden">
+            <div class="text-6xl mb-6">✓</div>
+            <h1 class="font-pixel-clear text-3xl mb-3 text-[#14F195]">Success!</h1>
+            <p class="text-white/60 mb-8">Welcome back. Redirecting...</p>
+        </div>
+        
+        <div id="state-error" class="hidden">
+            <div class="text-6xl mb-6 text-[#14F195]">✗</div>
+            <h1 class="font-pixel-clear text-3xl mb-3 text-[#14F195]">Sign in failed</h1>
+            <p class="text-white/60 mb-8" id="errorMsg">Link is invalid or expired</p>
+            <a href="/" class="inline-block px-6 py-3 bg-[#14F195] text-black font-bold rounded-sm hover:bg-white transition">Try again</a>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    
+    if (!token) {
+        showError('No token provided');
+        return;
+    }
+    
+    try {
+        const res = await fetch('/api/auth.php?action=verify_email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            // Save token & user
+            localStorage.setItem('mewc_token', data.token);
+            localStorage.setItem('mewc_user', JSON.stringify(data.user));
+            
+            document.getElementById('state-loading').classList.add('hidden');
+            document.getElementById('state-success').classList.remove('hidden');
+            
+            setTimeout(() => location.href = '/', 1800);
+        } else {
+            showError(data.error || 'Verification failed');
+        }
+    } catch (err) {
+        showError('Network error');
+        console.error(err);
+    }
+});
+
+function showError(msg) {
+    document.getElementById('state-loading').classList.add('hidden');
+    document.getElementById('state-error').classList.remove('hidden');
+    document.getElementById('errorMsg').textContent = msg;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEW ON CLAW · Build Your AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --lime: #14F195;
+    --lime-soft: #5FFFC0;
+    --pink: #14F195;
+    --black: #0A0A0A;
+    --ink: #1A1A1A;
+    --border: rgba(0,0,0,0.1);
+    --border-strong: rgba(0,0,0,0.25);
+}
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--lime); color: var(--black); margin: 0; overflow: hidden; height: 100vh; }
+@keyframes pageEnter { 0% { opacity: 0; } 100% { opacity: 1; } }
+.dashboard { animation: pageEnter 0.5s ease both; height: 100vh; display: flex; flex-direction: column; background: var(--lime); }
+
+/* TOP BAR */
+.topbar { height: 64px; border-bottom: 1px solid var(--black); display: flex; align-items: center; padding: 0 1.5rem; background: var(--lime); flex-shrink: 0; position: relative; z-index: 50; gap: 1rem; }
+.brand-mark { font-family: 'Space Grotesk', monospace; font-weight: 700; letter-spacing: 0.02em; font-size: 1.15rem; color: var(--black); text-decoration: none; display: inline-flex; align-items: baseline; }
+.brand-mark .pink-l { color: var(--pink); }
+.brand-mark .pink-dot { display: inline-block; width: 8px; height: 8px; background: var(--pink); border-radius: 50%; margin-left: 3px; transform: translateY(-1px); }
+
+.mode-tabs { display: flex; background: white; border: 1px solid var(--black); border-radius: 100px; padding: 4px; }
+.mode-tab { padding: 0.4rem 0.9rem; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 100px; transition: all 0.2s; }
+.mode-tab.active { background: var(--black); color: var(--lime); }
+
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 0.6rem; }
+.status-pill { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.75rem; background: var(--black); color: var(--lime); font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; border-radius: 100px; }
+.status-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.btn-primary { background: var(--black); color: var(--lime); padding: 0.55rem 1.1rem; font-weight: 700; font-size: 13px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; transition: all 0.2s; border-radius: 100px; font-family: inherit; }
+.btn-primary:hover { background: var(--pink); color: white; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-secondary { background: transparent; color: var(--black); padding: 0.45rem 0.9rem; font-weight: 600; font-size: 12px; border: 1px solid var(--black); cursor: pointer; border-radius: 100px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; font-family: inherit; }
+.btn-secondary:hover { background: var(--black); color: var(--lime); }
+.icon-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-strong); color: var(--black); cursor: pointer; transition: all 0.2s; background: transparent; border-radius: 100px; }
+.icon-btn:hover { background: var(--black); color: var(--lime); border-color: var(--black); }
+
+/* GRID */
+.main-grid { flex: 1; display: grid; grid-template-columns: 280px 1fr 1fr; overflow: hidden; }
+.panel { overflow-y: auto; overflow-x: hidden; position: relative; border-right: 1px solid var(--black); }
+.panel:last-child { border-right: none; }
+.panel-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--black); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: inherit; z-index: 5; }
+.panel-title { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); font-weight: 600; }
+
+/* LEFT: HISTORY */
+.panel-history { background: var(--lime); }
+.history-item { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer; transition: all 0.15s; display: flex; align-items: flex-start; gap: 0.5rem; position: relative; }
+.history-item:hover { background: var(--lime-soft); }
+.history-item.active { background: var(--black); color: var(--lime); }
+.history-item.active .history-date { color: rgba(255, 230, 0, 0.5); }
+.history-item-main { flex: 1; min-width: 0; }
+.history-actions { display: none; flex-direction: column; gap: 4px; flex-shrink: 0; opacity: 0; transition: opacity 0.15s; }
+.history-item:hover .history-actions { display: flex; opacity: 1; }
+.history-btn { background: rgba(0,0,0,0.08); border: none; padding: 4px 6px; border-radius: 4px; cursor: pointer; color: rgba(0,0,0,0.6); transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+.history-item.active .history-btn { background: rgba(255, 230, 0, 0.15); color: rgba(255, 230, 0, 0.7); }
+.history-btn:hover { background: var(--black); color: var(--lime); }
+.history-btn-danger:hover { background: var(--pink); color: white; }
+.history-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.history-date { font-size: 10px; color: rgba(0,0,0,0.5); font-family: 'Geist Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+.history-empty { padding: 2rem 1.25rem; text-align: center; color: rgba(0,0,0,0.5); font-size: 12px; }
+
+.new-btn { margin: 1rem 1.25rem; padding: 0.75rem; background: var(--black); color: var(--lime); border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; font-family: inherit; }
+.new-btn:hover { background: var(--pink); color: white; }
+
+/* CENTER: CHAT */
+.panel-chat { background: white; display: flex; flex-direction: column; }
+.chat-area { flex: 1; overflow-y: auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.msg { max-width: 90%; display: flex; flex-direction: column; gap: 0.4rem; animation: msgSlide 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes msgSlide { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+.msg-meta { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(0,0,0,0.4); }
+.msg-bubble { padding: 0.85rem 1.1rem; font-size: 14px; line-height: 1.6; border-radius: 12px; }
+.msg-user { align-self: flex-end; }
+.msg-user .msg-bubble { background: var(--pink); color: white; border-bottom-right-radius: 2px; }
+.msg-user .msg-meta { text-align: right; color: var(--pink); }
+.msg-ai .msg-bubble { background: var(--lime); color: var(--black); border: 1px solid var(--black); border-bottom-left-radius: 2px; }
+.msg-system .msg-bubble { background: #FAFAF8; border: 1px dashed rgba(0,0,0,0.2); color: rgba(0,0,0,0.7); font-size: 13px; }
+.typing-indicator { display: inline-flex; gap: 4px; align-items: center; }
+.typing-indicator span { width: 6px; height: 6px; border-radius: 50%; background: var(--black); animation: typingDot 1.4s infinite; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingDot { 0%,60%,100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.examples-area { padding: 0 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.example-chip { padding: 0.6rem 0.85rem; background: white; border: 1px solid var(--black); border-radius: 100px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: left; font-family: inherit; }
+.example-chip:hover { background: var(--lime); transform: translateX(2px); }
+
+.chat-input-bar { border-top: 1px solid var(--border); padding: 1rem; background: white; flex-shrink: 0; }
+.input-wrapper { display: flex; align-items: flex-end; gap: 0.5rem; background: #F8F8F5; border: 1px solid var(--black); padding: 0.5rem; border-radius: 16px; transition: all 0.2s; }
+.input-wrapper:focus-within { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,230,0,0.1); }
+.input-wrapper textarea { flex: 1; background: transparent; border: none; outline: none; resize: none; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.5; padding: 0.5rem; min-height: 24px; max-height: 120px; color: var(--black); }
+.send-btn { background: var(--black); color: var(--lime); border: none; width: 36px; height: 36px; border-radius: 100px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+.send-btn:hover { background: var(--pink); color: white; transform: rotate(-15deg); }
+.send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* Upload button & image preview */
+.attach-btn { background: transparent; color: var(--black); border: none; width: 36px; height: 36px; border-radius: 100px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+.attach-btn:hover { background: var(--lime); transform: scale(1.05); }
+.attach-btn:active { transform: scale(0.95); }
+#fileInput { display: none; }
+.image-preview-bar { display: none; padding: 0.5rem 1rem 0; gap: 0.5rem; flex-wrap: wrap; }
+.image-preview-bar.active { display: flex; }
+.img-chip { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem 0.4rem 0.4rem; background: var(--lime); border: 1px solid var(--black); border-radius: 12px; font-size: 12px; font-weight: 500; }
+.img-chip img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; border: 1px solid var(--black); }
+.img-chip .remove-x { background: var(--black); color: var(--lime); border: none; width: 18px; height: 18px; border-radius: 100px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; padding: 0; line-height: 1; }
+.img-chip .remove-x:hover { background: var(--pink); color: white; }
+.msg-image { max-width: 200px; border-radius: 12px; margin-top: 0.5rem; border: 1px solid var(--border); display: block; }
+
+/* RIGHT: PREVIEW */
+.panel-preview { background: var(--ink); color: white; display: flex; flex-direction: column; }
+.preview-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); background: var(--ink); flex-shrink: 0; align-items: center; }
+.preview-tab { padding: 1rem 1.5rem; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.2s; border-bottom: 2px solid transparent; display: inline-flex; align-items: center; gap: 0.4rem; }
+.preview-tab:hover { color: white; }
+.preview-tab.active { color: var(--lime); border-bottom-color: var(--lime); }
+.preview-actions { margin-left: auto; display: flex; gap: 0.5rem; padding: 0.5rem 1rem; }
+.preview-icon-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); cursor: pointer; border-radius: 6px; transition: all 0.2s; background: transparent; border: none; }
+.preview-icon-btn:hover { background: rgba(255,255,255,0.05); color: var(--lime); }
+.preview-icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.preview-content { flex: 1; overflow: auto; position: relative; background: white; }
+.preview-iframe { width: 100%; height: 100%; border: none; display: none; }
+.preview-iframe.active { display: block; }
+.code-view { display: none; height: 100%; overflow: auto; background: #1A1A1A; color: #E8E8E8; font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 1.7; padding: 1.25rem 1.5rem; white-space: pre; tab-size: 2; }
+.code-view.active { display: block; }
+
+.preview-empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem 2rem; background: white; color: var(--black); }
+.preview-empty-icon { width: 80px; height: 80px; background: var(--lime); border: 2px solid var(--black); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; transform: rotate(-3deg); }
+.preview-empty-title { font-size: 24px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+.preview-empty-sub { color: rgba(0,0,0,0.6); font-size: 14px; line-height: 1.6; max-width: 280px; }
+.preview-empty.hidden { display: none; }
+
+.gen-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10; color: var(--black); }
+.gen-overlay.active { display: flex; }
+.gen-spinner { width: 56px; height: 56px; border: 3px solid var(--black); border-top-color: var(--pink); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1.5rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.gen-text { font-size: 14px; font-weight: 600; margin-bottom: 0.4rem; }
+.gen-sub { font-family: 'Geist Mono', monospace; font-size: 11px; color: rgba(0,0,0,0.5); letter-spacing: 0.2em; text-transform: uppercase; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--black); color: var(--lime); padding: 0.85rem 1.5rem; border-radius: 100px; font-size: 13px; font-weight: 500; z-index: 9999; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.toast.active { transform: translateX(-50%) translateY(0); }
+
+/* LOGIN MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 9998; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+.modal-overlay.active { display: flex; }
+.modal-box { background: white; border: 1px solid var(--black); border-radius: 16px; max-width: 420px; width: 100%; overflow: hidden; animation: modalIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+@keyframes modalIn { 0% { opacity: 0; transform: scale(0.92) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+.modal-header { background: var(--lime); border-bottom: 1px solid var(--black); padding: 1.25rem 1.5rem; }
+.modal-body { padding: 1.5rem; }
+.input-modern { width: 100%; background: white; border: 1px solid var(--black); color: var(--black); padding: 0.75rem 1rem; font-size: 14px; font-family: inherit; outline: none; transition: all 0.2s; border-radius: 8px; }
+.input-modern:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,230,0,0.15); }
+
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 100px; }
+.panel-preview *::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+
+@media (max-width: 1100px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .panel:not(.panel-chat) { display: none; }
+}
+
+/* ===== ELECTRIC-BLUE THEME OVERRIDE (blue surfaces + neon-yellow ornaments) ===== */
+:root{ --blue-0:#0A0A0A; --blue-1:#111118; --blue-2:#1B1B24; --txt:#FFFFFF; --txt-dim:rgba(255,255,255,0.6); --line:rgba(255,255,255,0.16); }
+body,.dashboard{ background:var(--blue-0)!important; color:var(--txt)!important; }
+.topbar{ background:var(--blue-1)!important; border-bottom-color:var(--line)!important; }
+.brand-mark{ color:var(--txt)!important; }
+.panel{ border-right-color:var(--line)!important; }
+.panel-header{ border-bottom-color:var(--line)!important; }
+.panel-title{ color:var(--txt-dim)!important; }
+.mode-tabs{ background:var(--blue-2)!important; border-color:var(--line)!important; }
+.mode-tab{ color:var(--txt-dim)!important; }
+.mode-tab.active{ background:#14F195!important; color:#0A0A0A!important; }
+.icon-btn{ color:var(--txt)!important; border-color:var(--line)!important; }
+.icon-btn:hover{ background:#14F195!important; color:#0A0A0A!important; border-color:#14F195!important; }
+.status-pill{ background:var(--blue-2)!important; color:#14F195!important; }
+.btn-primary,.send-btn{ background:#14F195!important; color:#0A0A0A!important; }
+.btn-primary:hover,.send-btn:hover{ background:#5FFFC0!important; color:#0A0A0A!important; }
+.btn-secondary{ color:var(--txt)!important; border-color:var(--line)!important; }
+.btn-secondary:hover{ background:#14F195!important; color:#0A0A0A!important; }
+.panel-history{ background:var(--blue-1)!important; }
+.history-item{ border-bottom-color:var(--line)!important; }
+.history-item:hover{ background:var(--blue-2)!important; }
+.history-item.active{ background:#14F195!important; color:#0A0A0A!important; }
+.history-item.active .history-title{ color:#0A0A0A!important; }
+.history-item.active .history-date{ color:rgba(10,10,10,0.7)!important; }
+.history-item.active .history-btn{ background:rgba(10,10,10,0.15)!important; color:rgba(10,10,10,0.8)!important; }
+.history-title{ color:var(--txt)!important; }
+.history-date{ color:var(--txt-dim)!important; }
+.history-empty{ color:var(--txt-dim)!important; }
+.history-btn{ background:rgba(255,255,255,0.1)!important; color:var(--txt-dim)!important; }
+.history-btn:hover{ background:#14F195!important; color:#0A0A0A!important; }
+.new-btn{ background:#14F195!important; color:#0A0A0A!important; }
+.new-btn:hover{ background:#5FFFC0!important; color:#0A0A0A!important; }
+.panel-chat{ background:var(--blue-0)!important; }
+.msg-meta{ color:var(--txt-dim)!important; }
+.msg-user .msg-bubble{ background:#14F195!important; color:#0A0A0A!important; }
+.msg-user .msg-meta{ color:#14F195!important; }
+.msg-ai .msg-bubble{ background:var(--blue-2)!important; color:var(--txt)!important; border-color:var(--line)!important; }
+.msg-system .msg-bubble{ background:var(--blue-1)!important; color:var(--txt-dim)!important; border-color:var(--line)!important; }
+.typing-indicator span{ background:#14F195!important; }
+.example-chip{ background:var(--blue-2)!important; color:var(--txt)!important; border-color:var(--line)!important; }
+.example-chip:hover{ background:#14F195!important; color:#0A0A0A!important; }
+.chat-input-bar{ background:var(--blue-1)!important; border-top-color:var(--line)!important; }
+.input-wrapper{ background:var(--blue-2)!important; border-color:var(--line)!important; }
+.input-wrapper:focus-within{ border-color:#14F195!important; }
+.input-wrapper textarea{ color:var(--txt)!important; }
+.input-wrapper textarea::placeholder{ color:var(--txt-dim)!important; }
+.attach-btn{ color:var(--txt)!important; }
+.attach-btn:hover{ background:#14F195!important; color:#0A0A0A!important; }
+.img-chip{ background:var(--blue-2)!important; color:var(--txt)!important; border-color:var(--line)!important; }
+.panel-preview{ background:var(--blue-1)!important; }
+.preview-tabs{ background:var(--blue-1)!important; }
+.preview-content{ background:var(--blue-0)!important; }
+.preview-empty{ background:var(--blue-0)!important; color:var(--txt)!important; }
+.preview-empty-sub{ color:var(--txt-dim)!important; }
+.preview-empty-icon{ background:#14F195!important; border-color:#0A0A0A!important; }
+.gen-overlay{ background:rgba(0,0,40,0.92)!important; color:var(--txt)!important; }
+.gen-spinner{ border-color:var(--line)!important; border-top-color:#14F195!important; }
+.gen-sub{ color:var(--txt-dim)!important; }
+.modal-box{ background:var(--blue-1)!important; border-color:var(--line)!important; }
+.modal-header{ background:var(--blue-2)!important; border-bottom-color:var(--line)!important; color:var(--txt)!important; }
+.input-modern{ background:var(--blue-0)!important; color:var(--txt)!important; border-color:var(--line)!important; }
+/* ===== /OVERRIDE ===== */
+</style>
+    <!-- Favicon (embedded base64 - no separate files needed) -->
+    <meta name="theme-color" content="#0A0A0A">
+
+
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" href="assets/logo.png">
+</head>
+<body>
+<div class="dashboard">
+    <div class="topbar">
+        <a href="index.html" class="brand-mark" style="background:linear-gradient(120deg,#9945FF,#14F195);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">MEW ON CLAW<span class="pink-dot"></span></a>
+        <div class="mode-tabs">
+            <div class="mode-tab active" data-mode="craft" onclick="switchMode('craft')">🎨 Craft</div>
+            <div class="mode-tab" data-mode="assistant" onclick="switchMode('assistant')">🤖 Assistant</div>
+        </div>
+        <div class="topbar-right">
+            <div class="status-pill" id="userStatusPill" data-user-menu style="cursor:pointer;"><span class="dot"></span><span id="userStatus">Guest</span></div>
+            <button class="icon-btn" onclick="downloadHTML()" title="Download"><iconify-icon icon="lucide:download" width="14"></iconify-icon></button>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <!-- LEFT: HISTORY -->
+        <div class="panel panel-history">
+            <div class="panel-header">
+                <div class="panel-title">History</div>
+                <iconify-icon icon="lucide:clock" width="14"></iconify-icon>
+            </div>
+            <button class="new-btn" onclick="newChat()">
+                <iconify-icon icon="lucide:plus" width="14"></iconify-icon>
+                New Creation
+            </button>
+            <div id="historyList">
+                <div class="history-empty">No creations yet.<br>Build your first one →</div>
+            </div>
+        </div>
+
+        <!-- CENTER: CHAT -->
+        <div class="panel panel-chat">
+            <div class="chat-area" id="chatArea">
+                <div class="msg msg-system">
+                    <div class="msg-bubble" id="welcomeMsg">
+                        👋 Welcome to <strong>MEW ON CLAW</strong>!<br><br>
+                        <strong>🎨 Craft Mode:</strong> Describe anything — landing pages, calculators, games, dashboards. I'll generate the HTML and show it in the preview →<br><br>
+                        Try one of the examples below or just type your idea.
+                    </div>
+                </div>
+            </div>
+            <div class="examples-area" id="examplesArea">
+                <button class="example-chip" onclick="useExample('Build a brutalist landing page for a futuristic energy drink brand with bold typography and animations')">⚡ Energy drink landing page</button>
+                <button class="example-chip" onclick="useExample('Create a BMI calculator with modern UI and smooth animations')">🧮 BMI calculator with animations</button>
+                <button class="example-chip" onclick="useExample('Build a tic-tac-toe game against AI with retro 80s aesthetic')">🎮 Retro tic-tac-toe vs AI</button>
+                <button class="example-chip" onclick="useExample('Instagram analytics dashboard with charts and stats')">📊 Instagram analytics dashboard</button>
+            </div>
+            <div class="chat-input-bar">
+                <div class="image-preview-bar" id="imagePreviewBar"></div>
+                <div class="input-wrapper">
+                    <button class="attach-btn" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach image">
+                        <iconify-icon icon="lucide:paperclip" width="16"></iconify-icon>
+                    </button>
+                    <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFileSelect(event)">
+                    <textarea id="chatInput" placeholder="Describe what you want to build..." rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        <iconify-icon icon="lucide:arrow-up" width="16"></iconify-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: PREVIEW -->
+        <div class="panel panel-preview">
+            <div class="preview-tabs">
+                <div class="preview-tab active" data-view="preview" onclick="switchView('preview')"><iconify-icon icon="lucide:eye" width="12"></iconify-icon>Preview</div>
+                <div class="preview-tab" data-view="code" onclick="switchView('code')"><iconify-icon icon="lucide:code" width="12"></iconify-icon>Code</div>
+                <div class="preview-actions">
+                    <button class="preview-icon-btn" onclick="copyCode()" title="Copy"><iconify-icon icon="lucide:copy" width="14"></iconify-icon></button>
+                    <button class="preview-icon-btn" onclick="downloadHTML()" title="Download"><iconify-icon icon="lucide:download" width="14"></iconify-icon></button>
+                    <button class="preview-icon-btn" onclick="openInNewTab()" title="Open in new tab"><iconify-icon icon="lucide:external-link" width="14"></iconify-icon></button>
+                    <button class="preview-icon-btn" onclick="saveCreation()" title="Save"><iconify-icon icon="lucide:save" width="14"></iconify-icon></button>
+                </div>
+            </div>
+            <div class="preview-content">
+                <div class="preview-empty" id="previewEmpty">
+                    <div class="preview-empty-icon"><iconify-icon icon="lucide:sparkles" width="36"></iconify-icon></div>
+                    <div class="preview-empty-title">Your creation awaits.</div>
+                    <div class="preview-empty-sub">Describe what you want to build in the chat. The HTML output will appear here — live and interactive.</div>
+                </div>
+                <iframe class="preview-iframe" id="previewIframe"></iframe>
+                <div class="code-view" id="codeView"></div>
+                <div class="gen-overlay" id="genOverlay">
+                    <div class="gen-spinner"></div>
+                    <div class="gen-text" id="genText">Generating your creation...</div>
+                    <div class="gen-sub">This may take 10-30 seconds</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 style="margin:0;font-size:18px;font-weight:800;letter-spacing:-0.02em;">Login to MEW ON CLAW</h3>
+            <p style="margin:6px 0 0;font-size:12px;color:rgba(0,0,0,0.6);">Save your creations across sessions</p>
+        </div>
+        <div class="modal-body">
+            <input type="email" class="input-modern" id="loginEmail" placeholder="your@email.com" style="margin-bottom:1rem;">
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+                <button class="btn-secondary" onclick="closeLoginModal()">Cancel</button>
+                <button class="btn-primary" onclick="doLogin()"><iconify-icon icon="lucide:arrow-right" width="14"></iconify-icon>Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"><iconify-icon icon="lucide:check-circle" width="14"></iconify-icon><span id="toastMsg">Done!</span></div>
+
+<script>
+// ============================================
+// MEW ON CLAW Dashboard - Full JavaScript
+// ============================================
+
+const API_BASE = 'api/'; // relative path ke folder api
+
+const state = {
+    mode: 'craft',
+    messages: [],
+    currentHtml: '',
+    currentTitle: '',
+    isGenerating: false,
+    user: null
+};
+
+// ============ AUTH HELPERS ============
+function getAuthToken() {
+    return localStorage.getItem('mewc_token');
+}
+
+function getAuthUser() {
+    try {
+        return JSON.parse(localStorage.getItem('mewc_user') || 'null');
+    } catch { return null; }
+}
+
+function authHeaders() {
+    const token = getAuthToken();
+    return token ? { 'Authorization': 'Bearer ' + token } : {};
+}
+
+function clearAuth() {
+    localStorage.removeItem('mewc_token');
+    localStorage.removeItem('mewc_user');
+}
+
+async function logout() {
+    const token = getAuthToken();
+    if (token) {
+        try {
+            await fetch(API_BASE + 'auth.php?action=logout', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+        } catch (e) { console.log('Logout error:', e); }
+    }
+    clearAuth();
+    location.href = 'index.html';
+}
+
+// ============ AUTH GATE — REDIRECT IF NOT LOGGED IN ============
+async function checkAuthOrRedirect() {
+    const token = getAuthToken();
+    
+    if (!token) {
+        // No token → show modal di homepage
+        showAuthRequired();
+        return false;
+    }
+    
+    // Verify token still valid
+    try {
+        const res = await fetch(API_BASE + 'auth.php?action=me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        
+        if (data.success && data.user) {
+            return data.user;
+        } else {
+            // Token expired/invalid
+            clearAuth();
+            showAuthRequired();
+            return false;
+        }
+    } catch (e) {
+        console.error('Auth check failed:', e);
+        showAuthRequired();
+        return false;
+    }
+}
+
+function showAuthRequired() {
+    // Check if modal already exists
+    if (document.getElementById('inlineAuthModal')) return;
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'inlineAuthModal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:1rem;overflow-y:auto;';
+    overlay.innerHTML = `
+        <style>
+            #inlineAuthModal .auth-modal {
+                background: #0A0A0A;
+                border: 1px solid rgba(255, 230, 0, 0.2);
+                border-radius: 16px;
+                max-width: 640px;
+                width: 100%;
+                padding: 2.5rem;
+                position: relative;
+                box-shadow: 0 25px 60px -15px rgba(255, 230, 0, 0.15);
+                color: white;
+                font-family: 'Inter', system-ui, sans-serif;
+            }
+            @media (max-width: 640px) {
+                #inlineAuthModal .auth-modal { padding: 1.75rem; }
+            }
+            #inlineAuthModal .pixel-title {
+                font-family: 'Space Grotesk', monospace;
+                font-weight: 700;
+                line-height: 1;
+                letter-spacing: -0.03em;
+                font-size: 3rem;
+                margin: 0;
+            }
+            @media (min-width: 1024px) {
+                #inlineAuthModal .pixel-title { font-size: 3.5rem; }
+            }
+            #inlineAuthModal .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 10px;
+                font-family: 'Geist Mono', monospace;
+                text-transform: uppercase;
+                letter-spacing: 0.3em;
+                color: #14F195;
+                margin-bottom: 1rem;
+            }
+            #inlineAuthModal .close-btn {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.1);
+                color: rgba(255,255,255,0.6);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+            }
+            #inlineAuthModal .close-btn:hover {
+                background: rgba(255,255,255,0.1);
+                color: white;
+            }
+            #inlineAuthModal .label-mono {
+                font-family: 'Geist Mono', monospace;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+                color: rgba(255,255,255,0.4);
+                margin-bottom: 0.75rem;
+                display: block;
+            }
+            #inlineAuthModal input[type="email"] {
+                width: 100%;
+                background: #0A0A0A;
+                border: 1px solid rgba(255, 230, 0, 0.4);
+                border-radius: 8px;
+                padding: 0.95rem 1rem;
+                color: white;
+                font-size: 0.95rem;
+                font-family: 'Geist Mono', monospace;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            #inlineAuthModal input[type="email"]:focus {
+                border-color: #14F195;
+            }
+            #inlineAuthModal .btn-primary {
+                background: #14F195;
+                color: black;
+                font-weight: 700;
+                padding: 0.95rem 1.75rem;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-size: 0.95rem;
+                white-space: nowrap;
+                transition: opacity 0.2s;
+            }
+            #inlineAuthModal .btn-primary:hover { opacity: 0.85; }
+            #inlineAuthModal .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+            
+            #inlineAuthModal .wallet-card {
+                background: rgba(255,255,255,0.03);
+                border: 1px solid rgba(255,255,255,0.08);
+                border-radius: 10px;
+                padding: 0.85rem 1rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                transition: all 0.2s;
+            }
+            #inlineAuthModal .wallet-card:hover {
+                border-color: #14F195;
+                background: rgba(255, 230, 0, 0.05);
+                transform: translateY(-1px);
+            }
+            #inlineAuthModal .wallet-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+            #inlineAuthModal .wallet-name {
+                font-weight: 600;
+                font-size: 0.9rem;
+                color: white;
+                line-height: 1.2;
+            }
+            #inlineAuthModal .wallet-desc {
+                font-size: 9px;
+                font-family: 'Geist Mono', monospace;
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+                color: rgba(255,255,255,0.4);
+                margin-top: 2px;
+            }
+            
+            #inlineAuthModal .otp-grid {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 0.5rem;
+                max-width: 360px;
+                margin: 1rem auto;
+            }
+            #inlineAuthModal .otp-d {
+                width: 100%;
+                aspect-ratio: 1;
+                background: #0A0A0A;
+                border: 1px solid rgba(255, 230, 0, 0.4);
+                border-radius: 8px;
+                color: white;
+                font-size: 1.5rem;
+                font-weight: 700;
+                text-align: center;
+                font-family: 'Geist Mono', monospace;
+                outline: none;
+            }
+            #inlineAuthModal .otp-d:focus { border-color: #14F195; }
+            
+            #inlineAuthModal .err-msg {
+                color: #14F195;
+                font-size: 0.875rem;
+                text-align: center;
+                margin: 0.5rem 0;
+            }
+            
+            #inlineAuthModal .divider-text {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin: 1.5rem 0 1.25rem;
+            }
+            #inlineAuthModal .divider-text::before,
+            #inlineAuthModal .divider-text::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: rgba(255,255,255,0.08);
+            }
+            #inlineAuthModal .divider-text span {
+                font-family: 'Geist Mono', monospace;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.3em;
+                color: rgba(255,255,255,0.4);
+            }
+            
+            #inlineAuthModal .trust-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-family: 'Geist Mono', monospace;
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+                color: #14F195;
+            }
+        </style>
+        
+        <div class="auth-modal">
+            <button class="close-btn" onclick="window.location.href='index.html'" aria-label="Close">
+                <iconify-icon icon="solar:close-circle-linear" width="20"></iconify-icon>
+            </button>
+            
+            <!-- HEADER -->
+            <div class="badge">
+                <iconify-icon icon="solar:key-minimalistic-square-bold" width="14"></iconify-icon>
+                <span>Sign in to Lab</span>
+            </div>
+            <h2 class="pixel-title" style="margin-bottom: 0.75rem;">
+                Welcome <span style="color: #14F195;">back.</span>
+            </h2>
+            <p style="font-size: 0.875rem; color: rgba(255,255,255,0.5); margin: 0 0 2rem;">No password. No credit card. Just access.</p>
+            
+            <!-- STEP 1: EMAIL -->
+            <div id="iauthStep1">
+                <label class="label-mono">Sign in with email</label>
+                <div style="display: flex; gap: 0.6rem;">
+                    <input type="email" id="iauthEmail" placeholder="you@example.com" autocomplete="email" style="flex: 1;">
+                    <button class="btn-primary" id="iauthSendBtn" onclick="iauthSendCode()">Send code →</button>
+                </div>
+                <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0.6rem 0 0; font-family: 'Geist Mono', monospace;">We'll email you a 6-digit code. No password needed.</p>
+                
+                <!-- WALLET DIVIDER -->
+                <div class="divider-text"><span>Or connect wallet</span></div>
+                
+                <!-- WALLETS GRID -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.6rem;">
+                    <div class="wallet-card" onclick="iauthConnectWallet('metamask')">
+                        <div class="wallet-icon" style="background: #f6851b;">🦊</div>
+                        <div>
+                            <div class="wallet-name">MetaMask</div>
+                            <div class="wallet-desc">Browser ext.</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" onclick="iauthConnectWallet('phantom')">
+                        <div class="wallet-icon" style="background: #ab9ff2;">👻</div>
+                        <div>
+                            <div class="wallet-name">Phantom</div>
+                            <div class="wallet-desc">Solana</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" onclick="iauthConnectWallet('coinbase')">
+                        <div class="wallet-icon" style="background: #1652f0; color: white; font-size: 11px; font-weight: 700;">CB</div>
+                        <div>
+                            <div class="wallet-name">Coinbase</div>
+                            <div class="wallet-desc">Self-custody</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" onclick="iauthConnectWallet('trust')">
+                        <div class="wallet-icon" style="background: linear-gradient(135deg, #3375BB, #0500FF);">🛡️</div>
+                        <div>
+                            <div class="wallet-name">Trust Wallet</div>
+                            <div class="wallet-desc">Multi-chain</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" onclick="iauthConnectWallet('rainbow')">
+                        <div class="wallet-icon" style="background: linear-gradient(135deg, #FF8A65, #FFD54F, #4FC3F7, #BA68C8);">🌈</div>
+                        <div>
+                            <div class="wallet-name">Rainbow</div>
+                            <div class="wallet-desc">Mobile-first</div>
+                        </div>
+                    </div>
+                    <div class="wallet-card" onclick="iauthShowMoreWallets()">
+                        <div class="wallet-icon" style="background: rgba(255, 230, 0, 0.15); color: #14F195;">+</div>
+                        <div>
+                            <div class="wallet-name">More</div>
+                            <div class="wallet-desc">300+ wallets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- STEP 2: OTP -->
+            <div id="iauthStep2" style="display:none;">
+                <button onclick="iauthBack()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:0.8rem;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.25rem;padding:0;">← Change email</button>
+                <label class="label-mono">Enter 6-digit code</label>
+                <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin:0 0 0.5rem;">Code sent to <span id="iauthEmailDisplay" style="color:#14F195;font-family:'Geist Mono',monospace;"></span></p>
+                
+                <div class="otp-grid">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-d" data-i="0">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-d" data-i="1">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-d" data-i="2">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-d" data-i="3">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-d" data-i="4">
+                    <input type="text" maxlength="1" inputmode="numeric" class="otp-d" data-i="5">
+                </div>
+                
+                <p id="iauthErr" class="err-msg" style="display:none;"></p>
+                
+                <button class="btn-primary" id="iauthVerifyBtn" onclick="iauthVerify()" style="width:100%;margin-top:0.5rem;">Verify & Sign in</button>
+                
+                <div style="display:flex;justify-content:space-between;margin-top:1rem;font-size:0.75rem;font-family:'Geist Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.15em;">
+                    <span>⏱️ Expires in <span id="iauthTimer" style="color:#14F195;">15:00</span></span>
+                    <button onclick="iauthResend()" id="iauthResendBtn" style="background:none;border:none;color:inherit;font:inherit;cursor:pointer;text-transform:uppercase;" disabled>Resend (<span id="iauthResendT">30</span>s)</button>
+                </div>
+            </div>
+            
+            <!-- TRUST BADGES + LEGAL -->
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; justify-content: center; margin-bottom: 1rem;">
+                    <span class="trust-badge"><iconify-icon icon="solar:shield-check-bold" width="14"></iconify-icon>Non-custodial</span>
+                    <span class="trust-badge"><iconify-icon icon="solar:eye-closed-bold" width="14"></iconify-icon>Privacy first</span>
+                    <span class="trust-badge"><iconify-icon icon="solar:lock-keyhole-minimalistic-bold" width="14"></iconify-icon>Encrypted</span>
+                </div>
+                <p style="text-align: center; font-size: 11px; font-family: 'Geist Mono', monospace; color: rgba(255,255,255,0.3);">
+                    By signing in, you agree to our <a href="terms.html" style="color: rgba(255,255,255,0.5); text-decoration: underline;">Terms</a> and <a href="privacy.html" style="color: rgba(255,255,255,0.5); text-decoration: underline;">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    // Auto-focus email
+    setTimeout(() => document.getElementById('iauthEmail')?.focus(), 100);
+    
+    // OTP input behavior
+    setupInlineOtpInputs();
+}
+
+// Inline auth helpers
+let iauthEmail = '';
+let iauthResendCountdown = 30;
+let iauthResendInterval = null;
+let iauthExpiryInterval = null;
+let iauthExpirySeconds = 900;
+
+async function iauthSendCode() {
+    const email = document.getElementById('iauthEmail').value.trim();
+    if (!email) {
+        document.getElementById('iauthEmail').focus();
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('iauthEmail').style.borderColor = '#14F195';
+        return;
+    }
+    
+    const btn = document.getElementById('iauthSendBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    
+    try {
+        const res = await fetch(API_BASE + 'auth.php?action=request_email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            iauthEmail = email;
+            document.getElementById('iauthStep1').style.display = 'none';
+            document.getElementById('iauthStep2').style.display = 'block';
+            document.getElementById('iauthEmailDisplay').textContent = email;
+            
+            iauthStartResendTimer();
+            iauthStartExpiryTimer();
+            
+            setTimeout(() => document.querySelector('.otp-d[data-i="0"]')?.focus(), 100);
+        } else {
+            iauthShowErr(data.error || 'Failed to send');
+            btn.disabled = false;
+            btn.textContent = 'Send code →';
+        }
+    } catch (e) {
+        iauthShowErr('Network error');
+        btn.disabled = false;
+        btn.textContent = 'Send code →';
+    }
+}
+
+async function iauthVerify() {
+    const otp = Array.from(document.querySelectorAll('.otp-d')).map(i => i.value).join('');
+    
+    if (otp.length !== 6) {
+        iauthShowErr('Enter all 6 digits');
+        return;
+    }
+    
+    const btn = document.getElementById('iauthVerifyBtn');
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    
+    try {
+        const res = await fetch(API_BASE + 'auth.php?action=verify_otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: iauthEmail, otp })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            localStorage.setItem('mewc_token', data.token);
+            localStorage.setItem('mewc_user', JSON.stringify(data.user));
+            
+            btn.textContent = '✓ Signed in!';
+            btn.style.background = '#22c55e';
+            
+            // Reload to remove modal & init dashboard
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            iauthShowErr(data.error || 'Invalid code');
+            btn.disabled = false;
+            btn.textContent = 'Verify & Sign in';
+            // Clear digits
+            document.querySelectorAll('.otp-d').forEach(i => i.value = '');
+            document.querySelector('.otp-d[data-i="0"]')?.focus();
+        }
+    } catch (e) {
+        iauthShowErr('Network error');
+        btn.disabled = false;
+        btn.textContent = 'Verify & Sign in';
+    }
+}
+
+function iauthBack() {
+    document.getElementById('iauthStep2').style.display = 'none';
+    document.getElementById('iauthStep1').style.display = 'block';
+    document.getElementById('iauthSendBtn').disabled = false;
+    document.getElementById('iauthSendBtn').textContent = 'Send code →';
+    document.querySelectorAll('.otp-d').forEach(i => i.value = '');
+    if (iauthResendInterval) clearInterval(iauthResendInterval);
+    if (iauthExpiryInterval) clearInterval(iauthExpiryInterval);
+    document.getElementById('iauthEmail')?.focus();
+}
+
+async function iauthResend() {
+    const btn = document.getElementById('iauthResendBtn');
+    if (btn.disabled) return;
+    
+    try {
+        const res = await fetch(API_BASE + 'auth.php?action=request_email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: iauthEmail })
+        });
+        const data = await res.json();
+        if (data.success) {
+            iauthShowErr('✓ New code sent');
+            iauthStartResendTimer();
+            iauthStartExpiryTimer();
+        }
+    } catch {}
+}
+
+// === WALLET CONNECT HANDLERS ===
+async function iauthConnectWallet(walletType) {
+    const walletNames = {
+        metamask: 'MetaMask',
+        phantom: 'Phantom',
+        coinbase: 'Coinbase Wallet',
+        trust: 'Trust Wallet',
+        rainbow: 'Rainbow'
+    };
+    
+    const errEl = document.getElementById('iauthErr');
+    if (errEl) {
+        errEl.style.display = 'block';
+        errEl.style.color = '#14F195';
+        errEl.textContent = `Connecting to ${walletNames[walletType]}...`;
+    }
+    
+    try {
+        let walletAddress = null;
+        let signature = null;
+        
+        // STEP 1: Connect wallet
+        if (walletType === 'phantom') {
+            if (!window.solana || !window.solana.isPhantom) {
+                throw new Error('Phantom not installed. Get it at phantom.app');
+            }
+            const resp = await window.solana.connect();
+            walletAddress = resp.publicKey.toString();
+        } else if (['metamask', 'coinbase', 'trust', 'rainbow'].includes(walletType)) {
+            if (!window.ethereum) {
+                throw new Error(`${walletNames[walletType]} not detected. Please install or use mobile dapp browser.`);
+            }
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            walletAddress = accounts[0];
+        }
+        
+        // STEP 2: Get nonce
+        if (errEl) errEl.textContent = 'Getting challenge...';
+        const nonceRes = await fetch(API_BASE + 'auth.php?action=wallet_nonce', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ wallet: walletAddress })
+        });
+        const nonceData = await nonceRes.json();
+        if (!nonceData.success) throw new Error(nonceData.error || 'Failed to get nonce');
+        
+        // STEP 3: Sign message
+        if (errEl) errEl.textContent = 'Sign message in your wallet...';
+        if (walletType === 'phantom') {
+            const encodedMsg = new TextEncoder().encode(nonceData.message);
+            const signed = await window.solana.signMessage(encodedMsg, 'utf8');
+            signature = btoa(String.fromCharCode(...signed.signature));
+        } else {
+            signature = await window.ethereum.request({
+                method: 'personal_sign',
+                params: [nonceData.message, walletAddress]
+            });
+        }
+        
+        // STEP 4: Verify
+        if (errEl) errEl.textContent = 'Verifying...';
+        const verifyRes = await fetch(API_BASE + 'auth.php?action=wallet_verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                wallet: walletAddress,
+                signature: signature,
+                wallet_type: walletType,
+                nonce: nonceData.nonce
+            })
+        });
+        const data = await verifyRes.json();
+        if (!data.success) throw new Error(data.error || 'Verification failed');
+        
+        // STEP 5: Save token & reload
+        localStorage.setItem('mewc_token', data.token);
+        localStorage.setItem('mewc_user', JSON.stringify(data.user));
+        
+        if (errEl) {
+            errEl.style.color = '#14F195';
+            errEl.textContent = `✓ Connected! Welcome ${data.user.username || 'builder'}`;
+        }
+        
+        setTimeout(() => location.reload(), 1200);
+        
+    } catch (err) {
+        if (errEl) {
+            errEl.style.color = '#14F195';
+            errEl.textContent = '✗ ' + err.message;
+        }
+        console.error('Wallet connect error:', err);
+    }
+}
+
+function iauthShowMoreWallets() {
+    const errEl = document.getElementById('iauthErr');
+    if (errEl) {
+        errEl.style.display = 'block';
+        errEl.style.color = '#14F195';
+        errEl.textContent = 'WalletConnect (300+ wallets) coming soon. Use options above for now.';
+    }
+}
+
+function iauthShowErr(msg) {
+    const el = document.getElementById('iauthErr');
+    if (!el) {
+        alert(msg);
+        return;
+    }
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+}
+
+function iauthStartResendTimer() {
+    iauthResendCountdown = 30;
+    const btn = document.getElementById('iauthResendBtn');
+    const tEl = document.getElementById('iauthResendT');
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    
+    if (iauthResendInterval) clearInterval(iauthResendInterval);
+    iauthResendInterval = setInterval(() => {
+        iauthResendCountdown--;
+        if (iauthResendCountdown <= 0) {
+            clearInterval(iauthResendInterval);
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.innerHTML = 'Resend code';
+        } else {
+            tEl.textContent = iauthResendCountdown;
+        }
+    }, 1000);
+}
+
+function iauthStartExpiryTimer() {
+    iauthExpirySeconds = 900;
+    const tEl = document.getElementById('iauthTimer');
+    if (iauthExpiryInterval) clearInterval(iauthExpiryInterval);
+    iauthExpiryInterval = setInterval(() => {
+        iauthExpirySeconds--;
+        if (iauthExpirySeconds <= 0) {
+            clearInterval(iauthExpiryInterval);
+            tEl.textContent = 'expired';
+            tEl.style.color = '#14F195';
+        } else {
+            const m = Math.floor(iauthExpirySeconds / 60);
+            const s = iauthExpirySeconds % 60;
+            tEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        }
+    }, 1000);
+}
+
+function setupInlineOtpInputs() {
+    const digits = document.querySelectorAll('.otp-d');
+    digits.forEach((input, idx) => {
+        input.addEventListener('input', (e) => {
+            const val = e.target.value.replace(/\D/g, '').slice(0, 1);
+            e.target.value = val;
+            if (val && idx < digits.length - 1) digits[idx + 1].focus();
+            const allFilled = Array.from(digits).every(d => d.value);
+            if (allFilled) iauthVerify();
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && idx > 0) digits[idx - 1].focus();
+            if (e.key === 'Enter') iauthVerify();
+        });
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+            const cleaned = pasted.replace(/\D/g, '').slice(0, 6);
+            cleaned.split('').forEach((char, i) => {
+                if (digits[i]) digits[i].value = char;
+            });
+            if (cleaned.length === 6) {
+                digits[5].focus();
+                iauthVerify();
+            }
+        });
+    });
+    
+    // Email Enter to submit
+    document.getElementById('iauthEmail')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') iauthSendCode();
+    });
+}
+
+// ============ INIT ============
+async function init() {
+    // Check auth FIRST — redirect to home if not logged in
+    const user = await checkAuthOrRedirect();
+    if (!user) return;  // showAuthRequired() already triggered
+    
+    // User authenticated — set up UI
+    state.user = user;
+    
+    // Update user button
+    const userBtn = document.getElementById('userStatus');
+    if (userBtn) {
+        const display = user.username || (user.email ? user.email.split('@')[0] : 'user');
+        userBtn.textContent = display.toUpperCase();
+        userBtn.style.background = '#14F195';
+        userBtn.style.color = 'black';
+    }
+    
+    // Setup user dropdown menu (logout)
+    setupUserMenu();
+    
+    // Load saved history
+    loadHistory();
+}
+init();
+
+// ============ USER MENU (DROPDOWN with LOGOUT) ============
+function setupUserMenu() {
+    const userBtn = document.querySelector('[data-user-menu]') || document.getElementById('userStatus');
+    if (!userBtn) return;
+    
+    // Create dropdown menu
+    const menu = document.createElement('div');
+    menu.id = 'userDropdown';
+    menu.style.cssText = `
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: #0A0A0A;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 6px;
+        padding: 8px;
+        min-width: 200px;
+        z-index: 1000;
+        display: none;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    `;
+    menu.innerHTML = `
+        <div style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div style="color: rgba(255,255,255,0.5); font-size: 10px; font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Signed in as</div>
+            <div style="color: white; font-size: 14px; font-weight: 600;" id="dropdownUserName">${state.user.username || 'user'}</div>
+            <div style="color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 2px;" id="dropdownUserEmail">${state.user.email || state.user.wallet_address || ''}</div>
+        </div>
+        <a href="index.html" style="display:flex;align-items:center;gap:10px;padding:10px 16px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;border-radius:4px;">
+            <span>🏠</span> Home
+        </a>
+        <a href="faq.html" style="display:flex;align-items:center;gap:10px;padding:10px 16px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;border-radius:4px;">
+            <span>🔍</span> Discover
+        </a>
+        <div style="border-top:1px solid rgba(255,255,255,0.1);margin: 8px 0;"></div>
+        <button onclick="logout()" style="display:flex;align-items:center;gap:10px;width:100%;padding:10px 16px;background:transparent;border:none;color:#14F195;font-size:13px;text-align:left;cursor:pointer;border-radius:4px;font-family:inherit;">
+            <span>🚪</span> Sign out
+        </button>
+    `;
+    document.body.appendChild(menu);
+    
+    // Toggle on user button click
+    userBtn.style.cursor = 'pointer';
+    userBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = menu.style.display === 'block';
+        menu.style.display = isOpen ? 'none' : 'block';
+    });
+    
+    // Close on outside click
+    document.addEventListener('click', () => {
+        menu.style.display = 'none';
+    });
+    menu.addEventListener('click', (e) => e.stopPropagation());
+}
+
+// ============ MODE SWITCH ============
+function switchMode(mode) {
+    state.mode = mode;
+    document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    
+    const welcome = document.getElementById('welcomeMsg');
+    const examples = document.getElementById('examplesArea');
+    
+    if (mode === 'craft') {
+        welcome.innerHTML = `👋 <strong>Craft Mode</strong><br><br>Describe anything — landing pages, calculators, games, dashboards. I'll generate the HTML and show it in the preview →`;
+        examples.innerHTML = `
+            <button class="example-chip" onclick="useExample('Build a brutalist landing page for a futuristic energy drink brand with bold typography and animations')">⚡ Energy drink landing page</button>
+            <button class="example-chip" onclick="useExample('Create a BMI calculator with modern UI and smooth animations')">🧮 BMI calculator</button>
+            <button class="example-chip" onclick="useExample('Build a tic-tac-toe game against AI with retro 80s aesthetic')">🎮 Retro tic-tac-toe</button>
+            <button class="example-chip" onclick="useExample('Instagram analytics dashboard with charts and stats')">📊 Analytics dashboard</button>
+        `;
+    } else {
+        welcome.innerHTML = `🤖 <strong>Assistant Mode</strong><br><br>Describe an AI chatbot you want to build (name, personality, purpose). I'll generate a complete HTML chatbot you can deploy anywhere — just add your API key.`;
+        examples.innerHTML = `
+            <button class="example-chip" onclick="useExample('AI customer service for an online sneaker store, friendly and helpful, responds in clear professional English')">👟 Sneaker store CS</button>
+            <button class="example-chip" onclick="useExample('AI coding mentor for beginners, patient and uses simple analogies to explain complex concepts')">💻 Coding mentor</button>
+            <button class="example-chip" onclick="useExample('AI travel planner that helps users plan itineraries based on their budget and travel style')">✈️ Travel planner</button>
+            <button class="example-chip" onclick="useExample('AI nutritionist that creates meal plans based on user goals (cut, bulk, maintain)')">🥗 Nutritionist AI</button>
+        `;
+    }
+}
+
+// ============ EXAMPLES ============
+function useExample(text) {
+    document.getElementById('chatInput').value = text;
+    document.getElementById('chatInput').focus();
+    autoResize();
+}
+
+// ============ CHAT ============
+const chatInput = document.getElementById('chatInput');
+const chatArea = document.getElementById('chatArea');
+const examplesArea = document.getElementById('examplesArea');
+
+// ============ FILE UPLOAD ============
+let attachedImages = []; // array of {name, dataUrl, size}
+const MAX_IMAGES = 4;
+const MAX_SIZE_MB = 5;
+
+function handleFileSelect(event) {
+    const files = Array.from(event.target.files);
+    if (!files.length) return;
+
+    files.forEach(file => {
+        // Validate
+        if (!file.type.startsWith('image/')) {
+            alert(`"${file.name}" is not an image.`);
+            return;
+        }
+        if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+            alert(`"${file.name}" is too large. Max ${MAX_SIZE_MB}MB.`);
+            return;
+        }
+        if (attachedImages.length >= MAX_IMAGES) {
+            alert(`Max ${MAX_IMAGES} images per message.`);
+            return;
+        }
+
+        // Read & preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            attachedImages.push({
+                name: file.name,
+                dataUrl: e.target.result,
+                size: file.size
+            });
+            renderImagePreviews();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Reset so same file can be selected again
+    event.target.value = '';
+}
+
+function renderImagePreviews() {
+    const bar = document.getElementById('imagePreviewBar');
+    if (!attachedImages.length) {
+        bar.classList.remove('active');
+        bar.innerHTML = '';
+        return;
+    }
+    bar.classList.add('active');
+    bar.innerHTML = attachedImages.map((img, idx) => `
+        <div class="img-chip">
+            <img src="${img.dataUrl}" alt="${escapeHTML(img.name)}">
+            <span>${escapeHTML(img.name.length > 18 ? img.name.slice(0, 15) + '...' : img.name)}</span>
+            <button class="remove-x" onclick="removeImage(${idx})" title="Remove">&times;</button>
+        </div>
+    `).join('');
+}
+
+function removeImage(idx) {
+    attachedImages.splice(idx, 1);
+    renderImagePreviews();
+}
+
+function clearImages() {
+    attachedImages = [];
+    renderImagePreviews();
+}
+
+function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function autoResize() {
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+}
+chatInput.addEventListener('input', autoResize);
+chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+function addMessage(role, content, options = {}) {
+    const div = document.createElement('div');
+    div.className = `msg msg-${role}`;
+    
+    let metaText = '';
+    if (role === 'user') metaText = 'You';
+    else if (role === 'ai') metaText = 'MEW ON CLAW';
+    
+    let bubbleContent = content;
+    if (options.typing) {
+        bubbleContent = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+    }
+    
+    div.innerHTML = (metaText ? `<div class="msg-meta">${metaText}</div>` : '') + `<div class="msg-bubble">${bubbleContent}</div>`;
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    return div;
+}
+
+async function sendMessage() {
+    if (state.isGenerating) return;
+    const text = chatInput.value.trim();
+    const hasImages = attachedImages.length > 0;
+    if (!text && !hasImages) return;
+    
+    // Snapshot images for this message (so user can attach more for next msg)
+    const messageImages = [...attachedImages];
+    
+    chatInput.value = '';
+    clearImages();
+    autoResize();
+    examplesArea.style.display = 'none';
+    
+    // Build user message content (text + image previews)
+    let userBubble = escapeHtml(text || '(image attached)');
+    if (messageImages.length) {
+        userBubble += messageImages.map(img => 
+            `<img class="msg-image" src="${img.dataUrl}" alt="${escapeHTML(img.name)}">`
+        ).join('');
+    }
+    
+    // Add user message
+    addMessage('user', userBubble);
+    
+    // Build context for AI - include image filenames as text hint since vision API may not be enabled yet
+    let userContent = text;
+    if (messageImages.length) {
+        const imgList = messageImages.map(img => `[${img.name}]`).join(', ');
+        userContent = (text ? text + '\n\n' : '') + 
+            `[User attached ${messageImages.length} image${messageImages.length > 1 ? 's' : ''}: ${imgList}. Please use these as visual reference for the AI you are building.]`;
+    }
+    state.messages.push({ role: 'user', content: userContent });
+    
+    // Add typing indicator
+    const typingMsg = addMessage('ai', '', { typing: true });
+    
+    // Show generation overlay on preview
+    document.getElementById('genOverlay').classList.add('active');
+    state.isGenerating = true;
+    document.getElementById('sendBtn').disabled = true;
+    
+    try {
+        const res = await fetch(API_BASE + 'chat.php', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                ...authHeaders()
+            },
+            body: JSON.stringify({
+                mode: state.mode,
+                messages: state.messages
+            })
+        });
+        
+        // Handle auth error specifically
+        if (res.status === 401) {
+            clearAuth();
+            typingMsg.querySelector('.msg-bubble').innerHTML = '🔒 Session expired. Redirecting...';
+            setTimeout(() => location.href = 'index.html', 2000);
+            return;
+        }
+        
+        const data = await res.json();
+        
+        if (data.error) {
+            typingMsg.querySelector('.msg-bubble').innerHTML = `❌ Error: ${escapeHtml(data.error)}`;
+        } else {
+            // Determine display message
+            let displayMsg = data.message || 'Done!';
+            
+            // In craft mode, if HTML was generated, show clean confirmation
+            if (state.mode === 'craft' && data.html) {
+                // Strip any leftover code-block markers from message
+                displayMsg = displayMsg.replace(/```[a-z]*[\s\S]*?```/g, '').trim();
+                if (displayMsg.length < 10) {
+                    displayMsg = '✨ Built it! Preview on the right →';
+                }
+                // Add helpful actions hint
+                displayMsg += '\n\n<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:rgba(255,255,255,0.5);font-family:monospace;text-transform:uppercase;letter-spacing:0.1em;">→ Click <span style="color:#14F195;">Preview</span> tab · or <span style="color:#14F195;">Code</span> to see source</div>';
+                typingMsg.querySelector('.msg-bubble').innerHTML = displayMsg.replace(/\n/g, '<br>');
+            } else {
+                // Normal text response (assistant/agent mode), escape HTML
+                typingMsg.querySelector('.msg-bubble').innerHTML = escapeHtml(displayMsg).replace(/\n/g, '<br>');
+            }
+            
+            state.messages.push({ role: 'assistant', content: data.raw || data.message });
+            
+            // If HTML was generated, render in preview
+            if (data.html) {
+                state.currentHtml = data.html;
+                if (!state.currentTitle) {
+                    state.currentTitle = text.substring(0, 60).trim();
+                    if (text.length > 60) state.currentTitle += '...';
+                }
+                renderPreview();
+            }
+            
+            // ===== AUTO-SAVE setelah AI response =====
+            // Silent save, doesn't block UI
+            autoSaveCurrentCreation().then(savedId => {
+                if (savedId) {
+                    // Refresh history sidebar to show this creation
+                    loadHistory();
+                }
+            });
+        }
+    } catch (err) {
+        typingMsg.querySelector('.msg-bubble').innerHTML = `❌ Network error: ${escapeHtml(err.message)}`;
+    } finally {
+        document.getElementById('genOverlay').classList.remove('active');
+        state.isGenerating = false;
+        document.getElementById('sendBtn').disabled = false;
+        chatInput.focus();
+    }
+}
+
+// ============ PREVIEW ============
+function renderPreview() {
+    document.getElementById('previewEmpty').classList.add('hidden');
+    const iframe = document.getElementById('previewIframe');
+    const code = document.getElementById('codeView');
+    
+    iframe.srcdoc = state.currentHtml;
+    code.textContent = state.currentHtml;
+    
+    switchView('preview');
+}
+
+function switchView(view) {
+    document.querySelectorAll('.preview-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+    
+    if (!state.currentHtml) return;
+    
+    const iframe = document.getElementById('previewIframe');
+    const code = document.getElementById('codeView');
+    
+    if (view === 'preview') {
+        iframe.classList.add('active');
+        code.classList.remove('active');
+    } else {
+        iframe.classList.remove('active');
+        code.classList.add('active');
+    }
+}
+
+// ============ ACTIONS ============
+function copyCode() {
+    if (!state.currentHtml) { showToast('Nothing to copy yet'); return; }
+    navigator.clipboard.writeText(state.currentHtml);
+    showToast('📋 Code copied');
+}
+
+function downloadHTML() {
+    if (!state.currentHtml) { showToast('Generate something first'); return; }
+    const blob = new Blob([state.currentHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mewonclaw-${Date.now()}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('💾 Downloaded');
+}
+
+function openInNewTab() {
+    if (!state.currentHtml) { showToast('Generate first'); return; }
+    const blob = new Blob([state.currentHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+}
+
+async function saveCreation() {
+    if (!state.currentHtml) { showToast('Generate first'); return; }
+    if (!state.user) { showToast('Login to save'); openLoginModal(); return; }
+    
+    try {
+        const res = await fetch(API_BASE + 'save.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: state.currentTitle || 'Untitled creation',
+                prompt: state.messages[0]?.content || '',
+                html: state.currentHtml,
+                mode: state.mode
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast('✓ Saved!');
+            loadHistory();
+        }
+    } catch (e) {
+        showToast('Save failed');
+    }
+}
+
+// ========================================================
+// AUTO-SAVE current creation (silent, non-blocking)
+// ========================================================
+async function autoSaveCurrentCreation() {
+    // Skip if nothing meaningful to save
+    if (state.messages.length === 0 && !state.currentHtml) return null;
+    if (!state.user) return null;
+    
+    try {
+        // Generate title from first user message
+        let title = state.currentTitle || 'Untitled creation';
+        if (!state.currentTitle && state.messages.length > 0) {
+            const firstUserMsg = state.messages.find(m => m.role === 'user');
+            if (firstUserMsg) {
+                title = firstUserMsg.content.substring(0, 60).trim();
+                if (firstUserMsg.content.length > 60) title += '...';
+                state.currentTitle = title;
+            }
+        }
+        
+        if (state.currentBuildId) {
+            // UPDATE existing creation
+            await fetch(API_BASE + 'creations.php?id=' + state.currentBuildId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title,
+                    messages: state.messages,
+                    html: state.currentHtml,
+                    mode: state.mode
+                })
+            });
+            return state.currentBuildId;
+        } else {
+            // CREATE new creation
+            const res = await fetch(API_BASE + 'creations.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title,
+                    mode: state.mode,
+                    messages: state.messages,
+                    html: state.currentHtml
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                state.currentBuildId = data.creation.id;
+                return data.creation.id;
+            }
+        }
+    } catch (e) {
+        console.warn('Autosave failed:', e);
+    }
+    return null;
+}
+
+// ========================================================
+// NEW CREATION — Claude-style new chat behavior
+// ========================================================
+async function newChat() {
+    // ===== STEP 1: Auto-save current work (silently) =====
+    const hadContent = state.messages.length > 0 || state.currentHtml.length > 0;
+    if (hadContent) {
+        await autoSaveCurrentCreation();
+    }
+    
+    // ===== STEP 2: Reset state to fresh =====
+    state.messages = [];
+    state.currentHtml = '';
+    state.currentTitle = '';
+    state.currentBuildId = null;
+    
+    // ===== STEP 3: Reset chat area to welcome =====
+    const chatAreaEl = document.getElementById('chatArea');
+    if (chatAreaEl) {
+        chatAreaEl.innerHTML = `
+            <div class="msg msg-system">
+                <div class="msg-bubble" id="welcomeMsg">
+                    👋 Welcome to <strong>MEW ON CLAW</strong>!<br><br>
+                    <span id="modeWelcome"></span>
+                </div>
+            </div>
+        `;
+    }
+    
+    // ===== STEP 4: Reset input =====
+    const inputEl = document.getElementById('chatInput');
+    if (inputEl) {
+        inputEl.value = '';
+        inputEl.style.height = 'auto';
+        inputEl.focus();
+    }
+    
+    // ===== STEP 5: Reset preview panel =====
+    const previewEmpty = document.getElementById('previewEmpty');
+    const previewIframe = document.getElementById('previewIframe');
+    const codeView = document.getElementById('codeView');
+    
+    if (previewEmpty) previewEmpty.classList.remove('hidden');
+    if (previewIframe) {
+        previewIframe.classList.remove('active');
+        previewIframe.srcdoc = '';
+    }
+    if (codeView) {
+        codeView.classList.remove('active');
+        codeView.innerHTML = '';
+    }
+    
+    // ===== STEP 6: Reset preview tabs =====
+    document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+    const previewTab = document.querySelector('.preview-tab[data-view="preview"]');
+    if (previewTab) previewTab.classList.add('active');
+    
+    // ===== STEP 7: Show example chips =====
+    const examplesEl = document.getElementById('examplesArea');
+    if (examplesEl) examplesEl.style.display = 'flex';
+    
+    // ===== STEP 8: Hide gen overlay =====
+    const genOverlay = document.getElementById('genOverlay');
+    if (genOverlay) genOverlay.classList.remove('active');
+    
+    // ===== STEP 9: Update welcome msg per mode =====
+    switchMode(state.mode);
+    
+    // ===== STEP 10: Refresh history list (saved item appears) =====
+    if (hadContent) {
+        await loadHistory();
+        showToast('💾 Saved · ✨ New creation ready');
+    } else {
+        showToast('✨ New creation');
+    }
+    
+    // Scroll chat to top
+    if (chatAreaEl) chatAreaEl.scrollTop = 0;
+}
+
+// Toast helper - simple feedback notif
+function showToast(msg) {
+    const existing = document.getElementById('toastMsg');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.id = 'toastMsg';
+    toast.textContent = msg;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #0A0A0A;
+        color: #14F195;
+        padding: 10px 20px;
+        border-radius: 999px;
+        font-family: 'Geist Mono', monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.3s;
+        pointer-events: none;
+    `;
+    document.body.appendChild(toast);
+    
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(-4px)';
+    });
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%)';
+        setTimeout(() => toast.remove(), 300);
+    }, 1800);
+}
+
+// ============ HISTORY ============
+async function loadHistory() {
+    if (!state.user) return;
+    try {
+        const res = await fetch(API_BASE + 'creations.php');
+        const data = await res.json();
+        const list = document.getElementById('historyList');
+        if (!list) return;
+        
+        if (data.success && data.creations && data.creations.length > 0) {
+            list.innerHTML = data.creations.map(c => {
+                const isActive = c.id == state.currentBuildId ? ' active' : '';
+                return `
+                    <div class="history-item${isActive}" data-id="${c.id}">
+                        <div class="history-item-main" onclick="loadCreation(${c.id})">
+                            <div class="history-title" id="histTitle-${c.id}">${escapeHtml(c.title)}</div>
+                            <div class="history-date">${formatDate(c.updated_at)} · ${c.mode}</div>
+                        </div>
+                        <div class="history-actions">
+                            <button class="history-btn" onclick="event.stopPropagation(); renameCreation(${c.id})" title="Rename">
+                                <iconify-icon icon="lucide:pencil" width="12"></iconify-icon>
+                            </button>
+                            <button class="history-btn history-btn-danger" onclick="event.stopPropagation(); deleteCreation(${c.id})" title="Delete">
+                                <iconify-icon icon="lucide:trash-2" width="12"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            list.innerHTML = '<div class="history-empty">No creations yet.<br>Build your first one →</div>';
+        }
+    } catch (e) {
+        console.warn('Load history failed:', e);
+    }
+}
+
+async function loadCreation(id) {
+    try {
+        // Auto-save current first if there's content
+        if (state.messages.length > 0 || state.currentHtml) {
+            if (state.currentBuildId !== id) {
+                await autoSaveCurrentCreation();
+            }
+        }
+        
+        // Fetch full creation data
+        const res = await fetch(API_BASE + 'creations.php?id=' + id);
+        const data = await res.json();
+        if (!data.success) {
+            showToast('Failed to load');
+            return;
+        }
+        
+        const c = data.creation;
+        
+        // Set state
+        state.currentBuildId = c.id;
+        state.currentTitle = c.title;
+        state.currentHtml = c.html_output || '';
+        state.messages = Array.isArray(c.messages) ? c.messages : [];
+        if (c.mode) state.mode = c.mode;
+        
+        // ===== Render conversation history =====
+        const chatAreaEl = document.getElementById('chatArea');
+        if (chatAreaEl) {
+            chatAreaEl.innerHTML = '';
+            
+            // Restore each message
+            state.messages.forEach(msg => {
+                const isUser = msg.role === 'user';
+                const div = document.createElement('div');
+                div.className = 'msg ' + (isUser ? 'msg-user' : 'msg-bot');
+                
+                let bubbleContent = '';
+                if (isUser) {
+                    bubbleContent = escapeHtml(msg.content);
+                } else if (state.mode === 'craft' && state.currentHtml) {
+                    bubbleContent = '✨ Built it! Preview on the right →<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:rgba(255,255,255,0.5);font-family:monospace;text-transform:uppercase;letter-spacing:0.1em;">→ Click <span style="color:#14F195;">Preview</span> tab · or <span style="color:#14F195;">Code</span> to see source</div>';
+                } else {
+                    bubbleContent = escapeHtml(msg.content).replace(/\n/g, '<br>');
+                }
+                
+                div.innerHTML = `<div class="msg-bubble">${bubbleContent}</div>`;
+                chatAreaEl.appendChild(div);
+            });
+            
+            chatAreaEl.scrollTop = chatAreaEl.scrollHeight;
+        }
+        
+        // ===== Hide examples (we have content) =====
+        const examplesEl = document.getElementById('examplesArea');
+        if (examplesEl) examplesEl.style.display = 'none';
+        
+        // ===== Render preview if HTML exists =====
+        if (state.currentHtml) {
+            renderPreview();
+        } else {
+            const previewEmpty = document.getElementById('previewEmpty');
+            const previewIframe = document.getElementById('previewIframe');
+            if (previewEmpty) previewEmpty.classList.remove('hidden');
+            if (previewIframe) previewIframe.classList.remove('active');
+        }
+        
+        // ===== Update mode button if changed =====
+        document.querySelectorAll('.mode-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.mode === state.mode);
+        });
+        
+        // ===== Refresh history (highlight active) =====
+        loadHistory();
+        
+        showToast('📂 Loaded · ' + c.title.substring(0, 30));
+    } catch (e) {
+        console.error('Load creation error:', e);
+        showToast('Load failed');
+    }
+}
+
+// ========================================================
+// RENAME creation
+// ========================================================
+async function renameCreation(id) {
+    const titleEl = document.getElementById('histTitle-' + id);
+    const currentTitle = titleEl ? titleEl.textContent : '';
+    const newTitle = prompt('Rename creation:', currentTitle);
+    
+    if (!newTitle || newTitle.trim() === '' || newTitle === currentTitle) return;
+    
+    try {
+        const res = await fetch(API_BASE + 'creations.php?id=' + id, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: newTitle.trim() })
+        });
+        const data = await res.json();
+        if (data.success) {
+            // Update state if it's the active one
+            if (state.currentBuildId === id) {
+                state.currentTitle = newTitle.trim();
+            }
+            await loadHistory();
+            showToast('✏️ Renamed');
+        }
+    } catch (e) {
+        showToast('Rename failed');
+    }
+}
+
+// ========================================================
+// DELETE creation
+// ========================================================
+async function deleteCreation(id) {
+    if (!confirm('Delete this creation? This cannot be undone.')) return;
+    
+    try {
+        const res = await fetch(API_BASE + 'creations.php?id=' + id, {
+            method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+            // If deleted was the active one, reset to fresh
+            if (state.currentBuildId === id) {
+                state.messages = [];
+                state.currentHtml = '';
+                state.currentTitle = '';
+                state.currentBuildId = null;
+                
+                const chatAreaEl = document.getElementById('chatArea');
+                if (chatAreaEl) {
+                    chatAreaEl.innerHTML = `
+                        <div class="msg msg-system">
+                            <div class="msg-bubble">
+                                👋 Welcome to <strong>MEW ON CLAW</strong>!<br><br>
+                                <span id="modeWelcome"></span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                const previewEmpty = document.getElementById('previewEmpty');
+                const previewIframe = document.getElementById('previewIframe');
+                if (previewEmpty) previewEmpty.classList.remove('hidden');
+                if (previewIframe) {
+                    previewIframe.classList.remove('active');
+                    previewIframe.srcdoc = '';
+                }
+                
+                const examplesEl = document.getElementById('examplesArea');
+                if (examplesEl) examplesEl.style.display = 'flex';
+                
+                switchMode(state.mode);
+            }
+            
+            await loadHistory();
+            showToast('🗑️ Deleted');
+        }
+    } catch (e) {
+        showToast('Delete failed');
+    }
+}
+
+// ============ AUTH ============
+function openLoginModal() { document.getElementById('loginModal').classList.add('active'); document.getElementById('loginEmail').focus(); }
+function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
+
+async function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    if (!email || !email.includes('@')) { showToast('Invalid email'); return; }
+    try {
+        const res = await fetch(API_BASE + 'auth.php?action=login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (data.success) {
+            state.user = data.email;
+            document.getElementById('userStatus').textContent = email.split('@')[0];
+            closeLoginModal();
+            showToast('✓ Logged in');
+            loadHistory();
+        }
+    } catch (e) {
+        showToast('Login failed');
+    }
+}
+
+// ============ HELPERS ============
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diff = (now - d) / 1000 / 60; // minutes
+    if (diff < 1) return 'Just now';
+    if (diff < 60) return Math.floor(diff) + 'm ago';
+    if (diff < 1440) return Math.floor(diff / 60) + 'h ago';
+    return Math.floor(diff / 1440) + 'd ago';
+}
+
+let toastTimer;
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('active');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('active'), 2400);
+}
+
+// Click outside login modal
+document.getElementById('loginModal').addEventListener('click', (e) => { if (e.target.id === 'loginModal') closeLoginModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLoginModal(); });
+</script>
+</body>
+</html>
